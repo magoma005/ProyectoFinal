@@ -1,0 +1,2 @@
+Me gusta pensar que todo el programa funciona en forma de "cableo".
+Todos van conectando el uno con el otro, el final de la fila es la clase Veterinario, que conecta referencialmente con Consulta, Consulta conecta con Mascota, y Mascota conecta con Propietario, TODOS juntos conectan y crean el MAIN
