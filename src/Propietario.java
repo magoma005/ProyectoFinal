@@ -22,20 +22,12 @@ public class Propietario {
         this.mascotas = new ArrayList<>();
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
     // Setter con validación de nombre
     public void setNombre(String nombre) {
         if (nombre == null || nombre.isBlank()) {
             throw new IllegalArgumentException("El nombre no puede estar vacío.");
         }
         this.nombre = nombre;
-    }
-
-    public String getDocumento() {
-        return documento;
     }
 
     public void setDocumento(String documento) {
@@ -45,9 +37,6 @@ public class Propietario {
         this.documento = documento;
     }
 
-    public String getTelefono() {
-        return telefono;
-    }
 
     public void setTelefono(String telefono) {
         if (telefono == null || telefono.length() < 7) {
@@ -77,9 +66,6 @@ public class Propietario {
             m.mostrarHistorial();
         }
     }
-    public ArrayList<Mascota> getMascotas() {
-        return new ArrayList<>(mascotas);
-    }
      /* Setter de mascotas eliminado para proteger la colección interna
     public void setMascotas(ArrayList<Mascota> mascotas) {
         this.mascotas = mascotas;
@@ -93,7 +79,6 @@ public class Propietario {
 Cambios realizados:
 - Se agregaron setters y getters con validación para nombre, documento y teléfono.
 - Se reemplazó la asignación directa en el constructor por setters para reutilizar la validación.
-- Se protegió la lista interna de mascotas eliminando el setter y agregando un getter con copia defensiva.
 - Se agregaron validaciones mínimas de negocio (ej. nombre no vacío, documento y teléfono con mínimo de dígitos).
 - Se mantuvieron los atributos privados para cumplir con el principio de encapsulamiento.
 */
