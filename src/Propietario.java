@@ -91,3 +91,12 @@ public class Propietario {
 
 //Esta es la clase principal, todo el programa consiste en una conexion, y esta conexion, conectara con el MAIN a continuacion
 
+/*
+Cambios realizados:
+- Se agregaron setters y getters con validación para nombre, documento y teléfono.
+- Se reemplazó la asignación directa en el constructor por setters para reutilizar la validación.
+- Se protegió la lista interna de mascotas eliminando el setter y agregando un getter con copia defensiva.
+- Se agregaron validaciones mínimas de negocio (ej. nombre no vacío, documento y teléfono con mínimo de dígitos).
+- Se mantuvieron los atributos privados para cumplir con el principio de encapsulamiento.
+*/
+
