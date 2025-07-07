@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class Propietario {
     private String nombre;
-    private long documento;
-    private long telefono;
+    private String documento;
+    private String telefono;
     private ArrayList<Mascota> mascotas = new ArrayList<>();
 
     /* Código original sin validación
@@ -15,7 +15,7 @@ public class Propietario {
     */
 
     // Usamos setters con validación para centralizar la lógica
-    public Propietario(String nombre, long documento, long telefono) {
+    public Propietario(String nombre, String documento, String telefono) {
         setNombre(nombre);
         setDocumento(documento);
         setTelefono(telefono);
@@ -34,26 +34,24 @@ public class Propietario {
         this.nombre = nombre;
     }
 
-    public long getDocumento() {
+    public String getDocumento() {
         return documento;
     }
 
-    // Setter con validación de documento
-    public void setDocumento(long documento) {
-        if (String.valueOf(documento).length() < 5) {
-            throw new IllegalArgumentException("Documento inválido, debe tener mínimo 5 dígitos.");
+    public void setDocumento(String documento) {
+        if (documento == null || documento.length() < 5) {
+            throw new IllegalArgumentException("Documento inválido, debe tener mínimo 5 caracteres.");
         }
         this.documento = documento;
     }
 
-    public long getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    //Setter con validación de teléfono
-    public void setTelefono(long telefono) {
-        if (String.valueOf(telefono).length() < 7) {
-            throw new IllegalArgumentException("Teléfono inválido, debe tener mínimo 7 dígitos.");
+    public void setTelefono(String telefono) {
+        if (telefono == null || telefono.length() < 7) {
+            throw new IllegalArgumentException("Teléfono inválido, debe tener mínimo 7 caracteres.");
         }
         this.telefono = telefono;
     }
