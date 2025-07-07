@@ -3,25 +3,19 @@ public class Veterinario {
     private String especialidad;
 
     public Veterinario(String nombre, String especialidad) {
-        /*this.nombre = nombre;
-        this.especialidad = especialidad;*/
+        //this.nombre = nombre;
+        //this.especialidad = especialidad;
+
         //Validación de argumentos
         setNombre(nombre);
         setEspecialidad(especialidad);
     }
-    public String getNombre() {
-        return nombre;
-    }
-
     public void setNombre(String nombre) {
         // Validación: Nombre no puede ser vacío
         if (nombre == null || nombre.isBlank()) {
             throw new IllegalArgumentException("El nombre del veterinario no puede estar vacío.");
         }
         this.nombre = nombre;
-    }
-    public String getEspecialidad() {
-        return especialidad;
     }
     public void setEspecialidad(String especialidad) {
         // ✅ Validación: especialidad no puede ser vacía
