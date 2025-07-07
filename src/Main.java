@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
@@ -50,7 +51,7 @@ public class Main {
                 String espVet = sc.nextLine();
 
                 Veterinario veterinario = new Veterinario(nomVet, espVet);
-                Consulta consulta = new Consulta(codConsulta, fecha, veterinario);
+                Consulta consulta = new Consulta(fecha, veterinario);
 
                 mascota.agregarConsulta(consulta);
             }
@@ -59,9 +60,7 @@ public class Main {
         }
 
         // === Mostrar información completa ===
-        propietario.mostrarInformacion();
-        propietario.mostrarMascotas();
-
+        propietario.mostrarInformacionCompleta();
         sc.close();
     }
 }
