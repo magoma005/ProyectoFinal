@@ -4,33 +4,23 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        // Registrar propietario
+        // === Registro del Propietario ===
         System.out.print("Ingrese nombre del propietario: ");
         String nombreProp = sc.nextLine();
 
         System.out.print("Ingrese documento del propietario: ");
-        long docProp = sc.nextLong();
-        sc.nextLine(); // Limpiar buffer
+        String documento = sc.nextLine();
 
         System.out.print("Ingrese teléfono del propietario: ");
-        long telProp = sc.nextLong();
-        sc.nextLine(); // Limpiar buffer
+        String telefono = sc.nextLine();
 
-        // nextInt() y nextLong() no leen el Enter (salto de línea) al final de un número.
-        // Usamos sc.nextLine() para limpiar el buffer y evitar que la siguiente lectura de texto se salte.
+        Propietario propietario = new Propietario(nombreProp, documento, telefono);
 
-        Propietario propietario = new Propietario(nombreProp, docProp, telProp);
-
-        //Se llama a la clase al final de su pedido
-
-        // Registrar mascotas
+        // === Registrar mascotas ===
         System.out.print("Cuántas mascotas desea registrar? ");
-        int numMascotas = sc.nextInt();
-        sc.nextLine(); // Limpiar buffer
-
+        int numMascotas = Integer.parseInt(sc.nextLine());
 
         for (int i = 0; i < numMascotas; i++) {
-            // Este for se repite numMascotas veces para registrar cada mascota ingresada por el usuario.
             System.out.print("Ingrese nombre de la mascota: ");
             String nomMascota = sc.nextLine();
 
@@ -38,24 +28,20 @@ public class Main {
             String especie = sc.nextLine();
 
             System.out.print("Ingrese edad: ");
-            int edad = sc.nextInt();
-            sc.nextLine();
+            int edad = Integer.parseInt(sc.nextLine());
 
             Mascota mascota = new Mascota(nomMascota, especie, edad);
 
-            // Registrar consultas para esta mascota
+            // === Registrar consultas para esta mascota ===
             System.out.print("Cuántas consultas tiene esta mascota? ");
-            int numConsultas = sc.nextInt();
-            sc.nextLine();
+            int numConsultas = Integer.parseInt(sc.nextLine());
 
             for (int j = 0; j < numConsultas; j++) {
-                System.out.print("Ingrese código de la consulta: ");
-                int codConsulta = sc.nextInt();
-                sc.nextLine(); // Limpiar buffer
+                // Generar código automático de consulta usando IDGenerator
+                String codConsulta = IDGenerator.generarCodigoConsulta();
 
-                System.out.print("Ingrese fecha de la consulta: ");
-                int fecha = sc.nextInt();
-                sc.nextLine(); // Limpiar buffer
+                System.out.print("Ingrese fecha de la consulta (YYYY-MM-DD): ");
+                String fecha = sc.nextLine();
 
                 System.out.print("Ingrese nombre del veterinario: ");
                 String nomVet = sc.nextLine();
@@ -67,17 +53,23 @@ public class Main {
                 Consulta consulta = new Consulta(codConsulta, fecha, veterinario);
 
                 mascota.agregarConsulta(consulta);
-
-
-                mascota.agregarConsulta(consulta);
             }
 
             propietario.agregarMascota(mascota);
         }
 
-        // Mostrar información completa
-        propietario.mostrarInformacionCompleta();
+        // === Mostrar información completa ===
+        propietario.mostrarInformacion();
+        propietario.mostrarMascotas();
 
         sc.close();
     }
 }
+
+/*
+- Se reemplaza nextInt()/nextLong() por nextLine() + parseo para evitar problemas de buffer.
+- Se usa IDGenerator para generar códigos automáticos de consulta.
+- Se usa LocalDate en Consulta para manejar fechas con formato y validación correctos.
+- Se implementan las nuevas clases y métodos validados del taller.
+Resultado: código limpio, seguro, validado y listo para consola o extensión futura.
+*/
