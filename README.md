@@ -1,110 +1,79 @@
-# 🐾 Clínica Veterinaria – Registro de Mascotas y Consultas
+# 🐾 Proyecto Veterinaria – Ficha Clínica
 
-Aplicación de consola en **Java** que permite registrar propietarios, mascotas, consultas y veterinarios, mostrando el historial clínico completo de cada mascota.
+## 📌 Descripción
 
----
+Este proyecto es una aplicación de consola desarrollada en **Java** que gestiona la información de propietarios, mascotas, consultas y veterinarios en un sistema veterinario básico.
 
-## 📌 Descripción general
-
-Este proyecto implementa un sistema para:
-
+Permite:
 - Registrar propietarios con sus datos personales.
-- Registrar una o más mascotas por propietario.
-- Registrar consultas veterinarias para cada mascota.
-- Asignar un veterinario a cada consulta.
-- Imprimir el historial clínico completo en consola.
+- Registrar múltiples mascotas por propietario.
+- Registrar múltiples consultas por mascota, asignadas a veterinarios.
+- Generar códigos automáticos únicos para consultas y mascotas.
+- Visualizar la ficha clínica completa en consola.
 
 ---
 
-## 💻 Tecnologías utilizadas
+## 🚀 Tecnologías utilizadas
 
-- Java 17+
-- Scanner (`java.util.Scanner`)
-- ArrayList (`java.util.ArrayList`)
-
----
-
-## 🗂️ Estructura de carpetas y archivos
-
-ClinicaVeterinaria/
-├── Main.java
-├── Propietario.java
-├── Mascota.java
-├── Consulta.java
-└── Veterinario.java
-
+- **Java SE 17**
+- IDE: NetBeans / IntelliJ IDEA
 
 ---
 
-## 📝 Clases implementadas
+## 🗃️ Estructura de clases
 
-| Clase         | Descripción |
-|---------------|-------------|
-| `Propietario` | Contiene nombre, documento, teléfono y lista de mascotas. |
-| `Mascota`     | Contiene nombre, especie, edad y lista de consultas. |
-| `Consulta`    | Contiene código, fecha y veterinario que la realizó. |
-| `Veterinario` | Contiene nombre y especialidad. |
-
----
-
-## 🔗 Relaciones entre clases
-
-- **Propietario → Mascota:** 1 a N  
-- **Mascota → Consulta:** 1 a N  
-- **Consulta → Veterinario:** N a 1
+| Clase | Descripción |
+|---|---|
+| `Propietario` | Gestiona la información del propietario y su lista de mascotas. |
+| `Mascota` | Contiene datos de la mascota y delega su historial. |
+| `Consulta` | Registra la información de cada consulta médica. |
+| `Veterinario` | Guarda los datos del veterinario asignado a la consulta. |
+| `Historial` | Maneja la lista de consultas de una mascota. |
+| `IDGenerator` | Genera códigos automáticos únicos para consultas y mascotas. |
+| `Main` | Contiene el flujo principal de registro y muestra de información. |
 
 ---
 
-## ⚙️ Cómo compilar y ejecutar
 
-1. Abre la terminal en la carpeta del proyecto.  
-2. Compila los archivos:
+## 💡 Cambios implementados (Refactorización)
 
-```bash
-javac *.java
+✔️ Encapsulamiento completo de atributos.  
+✔️ Setters con validación (no se aceptan campos vacíos o inválidos).  
+✔️ **Uso de `LocalDate`** para el manejo correcto de fechas.  
+✔️ Implementación de la clase `Historial` para delegar la gestión de consultas.  
+✔️ Generación de IDs automáticos con `IDGenerator`.  
+✔️ Comentarios explicativos en el código para evidenciar las mejoras.  
+✔️ Protegida la colección interna de mascotas (`ArrayList`).  
+✔️ Código limpio, estructurado y listo para ejecución desde consola.
 
-Ejecuta la aplicación:
+---
 
-java Main
+## 📝 Ejecución
 
-📋 Ejemplo de salida esperada
+1. Compila el proyecto:
+    ```bash
+    javac *.java
+    ```
 
-===== FICHA CLÍNICA =====
-👤 Propietario: Laura Pérez
-🆔 Documento: 1234567890
-📞 Teléfono: 3001234567
+2. Ejecuta la clase Main:
+    ```bash
+    java Main
+    ```
 
-📋 Mascota: Luna | Especie: Gato | Edad: 3 años
-Historial de consultas:
-Consulta Código: 1001
-Fecha: 20250704
-Veterinario: Dra. Camila Soto | Especialidad: Medicina Felina
---------------------------
+3. Ingresa los datos según lo solicite el programa en consola.
 
-📋 Mascota: Max | Especie: Perro | Edad: 5 años
-Historial de consultas:
-Consulta Código: 1002
-Fecha: 20250705
-Veterinario: Dr. Esteban Mora | Especialidad: Cirugía General
---------------------------
-Consulta Código: 1003
-Fecha: 20250706
-Veterinario: Dr. Esteban Mora | Especialidad: Cirugía General
---------------------------
+---
 
-✅ Funcionalidades completadas
-Registro dinámico con Scanner.
+## ✅ Resultado esperado
 
-Uso de listas (ArrayList) para almacenar múltiples mascotas y consultas.
+Al finalizar, se mostrará en consola la **ficha clínica completa**, incluyendo:
 
-Relaciones de clases implementadas correctamente.
+- Datos del propietario
+- Información de cada mascota
+- Consultas médicas con fecha y veterinario asignado
 
-Impresión ordenada y estructurada del historial clínico.
-
+---
 ✨ Autor
 Taller práctico – Programación Orientada a Objetos
 💻 Miguel Angel Guarin Ospina
 📧 mago123005@gmail.com
-
-🙌 Notas finales
-Este proyecto hace parte de la práctica académica de POO para fortalecer el manejo de clases, relaciones y estructuras de datos en Java.

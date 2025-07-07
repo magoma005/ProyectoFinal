@@ -2,7 +2,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 public class Consulta {
-    private String Codigo; // Ahora es String, generado automáticamente
+    private String codigo; // Ahora es String, generado automáticamente
     // private int fecha;
     private LocalDate fecha;
     private Veterinario veterinario;
