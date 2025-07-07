@@ -12,7 +12,7 @@ public class IDGenerator {
 }
 
 /*
-✅ Cambios y explicación:
+Cambios y explicación:
 - Se creó la clase IDGenerator para generar códigos automáticos únicos.
 - Uso de variables estáticas para llevar el conteo global.
 - Método generarCodigoConsulta() devuelve un código con prefijo 'C' y número incremental.

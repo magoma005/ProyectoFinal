@@ -28,7 +28,7 @@ public class Historial {
 }
 
 /*
-✅ Cambios y explicación:
+Cambios y explicación:
 - Se creó la clase Historial para delegar el manejo de consultas de Mascota.
 - Se encapsula la lista de consultas.
 - Se usa una copia defensiva en getConsultas() para proteger el ArrayList interno.
