@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Mascota {
     private String nombre;
     private String especie;
@@ -8,10 +6,10 @@ public class Mascota {
     private Historial historial;
 
     public Mascota(String nombre, String especie, int edad) {
-        /*this.nombre = nombre;
-        this.especie = especie;
-        this.edad = edad;
-        this.consultas = new ArrayList<>();*/
+        //*this.nombre = nombre;
+        //this.especie = especie;
+        //this.edad = edad;
+        //this.consultas = new ArrayList<>();*/
         //Refactor: usar setters + historial
         setNombre(nombre);
         setEspecie(especie);
@@ -28,18 +26,6 @@ public class Mascota {
         System.out.println("📋 Mascota: " + nombre + " | Especie: " + especie + " | Edad: " + edad + " años");
         System.out.println("Historial de consultas:");
         historial.mostrarConsultas(); // ✅ nuevo método en Historial
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public String getEspecie() {
-        return especie;
-    }
-
-    public int getEdad() {
-        return edad;
     }
 
     // Setters con validación
