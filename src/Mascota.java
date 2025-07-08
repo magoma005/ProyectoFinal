@@ -29,6 +29,7 @@ public class Mascota {
     }
 
     // Setters con validación
+    //
     public void setNombre(String nombre) {
         if (nombre == null || nombre.isBlank()) {
             throw new IllegalArgumentException("El nombre de la mascota no puede estar vacío.");
