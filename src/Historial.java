@@ -1,3 +1,5 @@
+//Se creó la clase Historial para delegar el manejo de consultas de Mascota.
+
 import java.util.ArrayList;
 
 public class Historial {
@@ -6,11 +8,17 @@ public class Historial {
     public Historial() {
         this.consultas = new ArrayList<>();
     }
+
+    //Se encapsula la lista de consultas.
+
     public void agregarConsulta(Consulta consulta) {
         if (consulta != null) {
             consultas.add(consulta);
         }
     }
+
+    //Método mostrarConsultas() recorre e imprime cada consulta de forma ordenada.
+
     public void mostrarConsultas() {
         if (consultas.isEmpty()) {
             System.out.println("⚠️ Sin consultas registradas.");
@@ -22,14 +30,6 @@ public class Historial {
         }
     }
 }
-
-/*
-Cambios y explicación:
-- Se creó la clase Historial para delegar el manejo de consultas de Mascota.
-- Se encapsula la lista de consultas.
-- Se usa una copia defensiva en getConsultas() para proteger el ArrayList interno.
-- Método mostrarConsultas() recorre e imprime cada consulta de forma ordenada.
-*/
 
 
 

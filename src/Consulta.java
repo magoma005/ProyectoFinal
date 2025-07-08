@@ -4,6 +4,7 @@ import java.time.format.DateTimeParseException;
 public class Consulta {
     private String codigo;  // Ahora es String, generado automáticamente
     // private int fecha;
+    //Se cambió 'fecha' de int a LocalDate para mejor manejo de fechas.
     private LocalDate fecha;
     private Veterinario veterinario;
 
@@ -15,6 +16,7 @@ public class Consulta {
         //Validación y conversión de fecha
 
         // Código generado automáticamente
+        //Se cambió el tipo de 'codigo' a String y se genera automáticamente con IDGenerator.
         this.codigo = IDGenerator.generarCodigoConsulta();
 
         // Validación y conversión de fecha
@@ -23,6 +25,8 @@ public class Consulta {
         // Validación de veterinario
         setVeterinario(veterinario);
     }
+
+    //Se actualizó el método mostrarConsulta() para incluir formato y emojis.
 
     public void mostrarConsulta() {
         System.out.println("🔢 Código de la consulta: " + codigo);
@@ -34,6 +38,8 @@ public class Consulta {
         }
         System.out.println("--------------------------");
     }
+
+    //Se agregaron setters con validación para fecha y veterinario.
 
 public void setFecha(String fechaTexto) {
     try {
@@ -49,16 +55,3 @@ public void setVeterinario(Veterinario veterinario) {
     }
     this.veterinario = veterinario;
 }}
-
-/*
-Cambios realizados (Refactorización):
-- Se cambió el tipo de 'codigo' a String y se genera automáticamente con IDGenerator.
-- Se cambió 'fecha' de int a LocalDate para mejor manejo de fechas.
-- Se agregaron setters con validación para fecha y veterinario.
-- Se actualizó el método mostrarConsulta() para incluir formato y emojis.
-- Se eliminaron constructores que no validaban la información.
-- Se cumplieron buenas prácticas de encapsulamiento y diseño limpio.
-*/
-
-//Aqui le datos uso a los datos (gets) ya definidos en Veterinario, osea, su nombre y especialidad
-//Tambien guardamos info acerca de la consulta

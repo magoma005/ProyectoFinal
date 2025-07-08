@@ -3,7 +3,7 @@ public class Mascota {
     private String especie;
     private int edad;
     //private ArrayList<Consulta> consultas = new ArrayList<>();
-    private Historial historial;
+    private Historial historial; //Se reemplazó ArrayList<Consulta> por la clase Historial para mejor encapsulamiento.
 
     public Mascota(String nombre, String especie, int edad) {
         //*this.nombre = nombre;
@@ -25,11 +25,13 @@ public class Mascota {
     public void mostrarHistorial() {
         System.out.println("📋 Mascota: " + nombre + " | Especie: " + especie + " | Edad: " + edad + " años");
         System.out.println("Historial de consultas:");
-        historial.mostrarConsultas(); // ✅ nuevo método en Historial
+        historial.mostrarConsultas(); //- Se eliminó la posibilidad de exponer o modificar directamente la lista de consultas.
     }
 
     // Setters con validación
-    //
+    //Se agregaron setters con validación para nombre, especie y edad.
+    //Se usaron setters dentro del constructor para validar al instanciar.
+
     public void setNombre(String nombre) {
         if (nombre == null || nombre.isBlank()) {
             throw new IllegalArgumentException("El nombre de la mascota no puede estar vacío.");
@@ -50,14 +52,5 @@ public class Mascota {
         }
         this.edad = edad;
     }
-    // ❌ No se expone el historial directamente para proteger la colección interna
+    //No se expone el historial directamente para proteger la colección interna
 }
-
-/*
-Cambios realizados (Refactorización):
-- Se reemplazó ArrayList<Consulta> por la clase Historial para mejor encapsulamiento.
-- Se agregaron setters con validación para nombre, especie y edad.
-- Se usaron setters dentro del constructor para validar al instanciar.
-- Se eliminó la posibilidad de exponer o modificar directamente la lista de consultas.
-- Se cumplieron las buenas prácticas de diseño limpio y separación de responsabilidades.
-*/

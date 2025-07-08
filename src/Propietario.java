@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+//Se mantuvieron los atributos privados para cumplir con el principio de encapsulamiento
 public class Propietario {
     private String nombre;
     private String documento;
@@ -22,6 +22,8 @@ public class Propietario {
         this.mascotas = new ArrayList<>();
     }
 
+    //Se agregaron setters con validación para nombre, documento y teléfono
+    //Se agregaron validaciones mínimas de negocio (ej. nombre no vacío, documento y teléfono con mínimo de dígitos).
     // Setter con validación de nombre
     public void setNombre(String nombre) {
         if (nombre == null || nombre.isBlank()) {
@@ -72,14 +74,4 @@ public class Propietario {
     }
     */
 }
-
-//Esta es la clase principal, todo el programa consiste en una conexion, y esta conexion, conectara con el MAIN a continuacion
-
-/*
-Cambios realizados:
-- Se agregaron setters y getters con validación para nombre, documento y teléfono.
-- Se reemplazó la asignación directa en el constructor por setters para reutilizar la validación.
-- Se agregaron validaciones mínimas de negocio (ej. nombre no vacío, documento y teléfono con mínimo de dígitos).
-- Se mantuvieron los atributos privados para cumplir con el principio de encapsulamiento.
-*/
 

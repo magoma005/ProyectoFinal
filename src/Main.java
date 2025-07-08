@@ -38,6 +38,7 @@ public class Main {
 
             for (int j = 0; j < numConsultas; j++) {
                 // Generar código automático de consulta usando IDGenerator
+                //Se usa IDGenerator para generar códigos automáticos de consulta.
                 String codConsulta = IDGenerator.generarCodigoConsulta();
 
                 System.out.print("Ingrese fecha de la consulta (YYYY-MM-DD): ");
@@ -63,11 +64,3 @@ public class Main {
         sc.close();
     }
 }
-
-/*
-- Se reemplaza nextInt()/nextLong() por nextLine() + parseo para evitar problemas de buffer.
-- Se usa IDGenerator para generar códigos automáticos de consulta.
-- Se usa LocalDate en Consulta para manejar fechas con formato y validación correctos.
-- Se implementan las nuevas clases y métodos validados del taller.
-Resultado: código limpio, seguro, validado y listo para consola o extensión futura.
-*/
