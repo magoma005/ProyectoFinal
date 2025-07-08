@@ -2,15 +2,16 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 public class Consulta {
-    private String codigo; // Ahora es String, generado automáticamente
+    private String codigo;  // Ahora es String, generado automáticamente
     // private int fecha;
     private LocalDate fecha;
     private Veterinario veterinario;
 
     public Consulta(String fechaTexto, Veterinario veterinario) {
-        /*this.codigo = codigo;
-        this.fecha = fecha;
-        this.veterinario = veterinario;*/
+        //*this.codigo = codigo;
+        // this.fecha = fecha;
+        // this.veterinario = veterinario;*/
+
         //Validación y conversión de fecha
 
         // Código generado automáticamente
@@ -33,18 +34,6 @@ public class Consulta {
         }
         System.out.println("--------------------------");
     }
-
-public String getCodigo() {
-    return codigo;
-}
-
-public LocalDate getFecha() {
-    return fecha;
-}
-
-public Veterinario getVeterinario() {
-    return veterinario;
-}
 
 public void setFecha(String fechaTexto) {
     try {
