@@ -21,10 +21,6 @@ public class Historial {
             }
         }
     }
-    public ArrayList<Consulta> getConsultas() {
-        // ✅ Retorna copia defensiva para proteger la colección interna
-        return new ArrayList<>(consultas);
-    }
 }
 
 /*
