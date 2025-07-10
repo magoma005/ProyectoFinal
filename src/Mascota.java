@@ -53,4 +53,17 @@ public class Mascota {
         this.edad = edad;
     }
     //No se expone el historial directamente para proteger la colección interna
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getEspecie() {
+        return especie;
+    }
+
+    public int getEdad() {
+        return edad;
+    }
+
 }

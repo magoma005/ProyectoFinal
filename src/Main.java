@@ -38,7 +38,6 @@ public class Main {
 
             for (int j = 0; j < numConsultas; j++) {
                 // Generar código automático de consulta usando IDGenerator
-                //Se usa IDGenerator para generar códigos automáticos de consulta.
                 String codConsulta = IDGenerator.generarCodigoConsulta();
 
                 System.out.print("Ingrese fecha de la consulta (YYYY-MM-DD): ");
@@ -61,6 +60,15 @@ public class Main {
 
         // === Mostrar información completa ===
         propietario.mostrarInformacionCompleta();
+
+        // === MENÚ CRUD DE MASCOTAS ===
+        System.out.println("\n¿Desea abrir el CRUD general de mascotas? (s/n): ");
+        String opcionCrud = sc.nextLine();
+        if (opcionCrud.equalsIgnoreCase("s")) {
+            CrudMascotas crud = new CrudMascotas();
+            crud.menuCrud(); // Abre el menú CRUD de mascotas
+        }
+
         sc.close();
     }
 }
