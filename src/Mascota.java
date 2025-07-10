@@ -19,7 +19,7 @@ public class Mascota {
 
     public void agregarConsulta(Consulta consulta) {
         // consultas.add(consulta);
-        historial.agregarConsulta(consulta); // ✅ delegamos al historial
+        historial.agregarConsulta(consulta); //delegamos al historial
     }
 
     public void mostrarHistorial() {
