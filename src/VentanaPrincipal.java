@@ -131,10 +131,14 @@ public class VentanaPrincipal extends JFrame {
         lblClave.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         JPasswordField txtClave = new JPasswordField();
         txtClave.setPreferredSize(new Dimension(150, 25));
-
+        // Posiciona el próximo componente en la columna 0 (izquierda)
+        // Incrementa la fila en 1 para ubicar los siguientes componentes en una nueva línea del formulario
         gbc.gridx = 0; gbc.gridy++;
+        // Agrega la etiqueta lblClave (etiqueta "Clave historial") al formulario en la posición definida
+        // Cambia la posición horizontal a la columna 1 (derecha) para ubicar el campo de texto junto a la etiqueta
         form.add(lblClave, gbc);
         gbc.gridx = 1;
+        // Agrega el campo de texto txtClave (campo para ingresar la clave) en la misma fila pero en la columna 1
         form.add(txtClave, gbc);
 
         // Especie
