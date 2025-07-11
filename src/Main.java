@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        // === Registro del Propietario ===
+      /*  // === Registro del Propietario ===
         System.out.print("Ingrese nombre del propietario: ");
         String nombreProp = sc.nextLine();
 
@@ -59,14 +59,14 @@ public class Main {
         }
 
         // === Mostrar información completa ===
-        propietario.mostrarInformacionCompleta();
+        propietario.mostrarInformacionCompleta(); */
 
         // === MENÚ CRUD DE MASCOTAS ===
-        System.out.println("\n¿Desea abrir el CRUD general de mascotas? (s/n): ");
+        System.out.println("\n¿Desea abrir el CRUD del veterinario? (s/n): ");
         String opcionCrud = sc.nextLine();
         if (opcionCrud.equalsIgnoreCase("s")) {
             CrudMascotas crud = new CrudMascotas();
-            crud.menuCrud(); // Abre el menú CRUD de mascotas
+            crud.menuCrud(); // Abre el menú CRUD del veterinario
         }
 
         sc.close();

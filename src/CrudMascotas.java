@@ -10,7 +10,7 @@ public class CrudMascotas {
         int opcion;
 
         do {
-            System.out.println("\n=== CRUD MASCOTAS ===");
+            System.out.println("\n=== VETERINARIO ===");
             System.out.println("1. Agregar Mascota");
             System.out.println("2. Listar Mascotas");
             System.out.println("3. Actualizar Mascota");
@@ -24,7 +24,7 @@ public class CrudMascotas {
                 case 2 -> listarMascotas();
                 case 3 -> actualizarMascota(sc);
                 case 4 -> eliminarMascota(sc);
-                case 5 -> System.out.println("Saliendo del CRUD de Mascotas...");
+                case 5 -> System.out.println("Saliendo del veterinario...");
                 default -> System.out.println("Opción inválida.");
             }
 
