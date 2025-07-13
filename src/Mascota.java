@@ -2,35 +2,37 @@ public class Mascota {
     private String nombre;
     private String especie;
     private int edad;
-    //private ArrayList<Consulta> consultas = new ArrayList<>();
-    private Historial historial; //Se reemplazó ArrayList<Consulta> por la clase Historial para mejor encapsulamiento.
+    private String clave; // ✅ NUEVO: clave para seguridad
+    private Historial historial; // Se reemplazó ArrayList<Consulta> por la clase Historial para mejor encapsulamiento.
 
     public Mascota(String nombre, String especie, int edad) {
-        //*this.nombre = nombre;
-        //this.especie = especie;
-        //this.edad = edad;
-        //this.consultas = new ArrayList<>();*/
-        //Refactor: usar setters + historial
+        // Refactor: usar setters + historial
         setNombre(nombre);
         setEspecie(especie);
         setEdad(edad);
         this.historial = new Historial();
     }
 
+    public Mascota(String nombre, String especie, int edad, String clave) {
+        // ✅ Nuevo constructor con clave
+        setNombre(nombre);
+        setEspecie(especie);
+        setEdad(edad);
+        setClave(clave);
+        this.historial = new Historial();
+    }
+
     public void agregarConsulta(Consulta consulta) {
-        // consultas.add(consulta);
-        historial.agregarConsulta(consulta); //delegamos al historial
+        historial.agregarConsulta(consulta); // delegamos al historial
     }
 
     public void mostrarHistorial() {
         System.out.println("📋 Mascota: " + nombre + " | Especie: " + especie + " | Edad: " + edad + " años");
         System.out.println("Historial de consultas:");
-        historial.mostrarConsultas(); //- Se eliminó la posibilidad de exponer o modificar directamente la lista de consultas.
+        historial.mostrarConsultas();
     }
 
-    // Setters con validación
-    //Se agregaron setters con validación para nombre, especie y edad.
-    //Se usaron setters dentro del constructor para validar al instanciar.
+    // === Setters con validación ===
 
     public void setNombre(String nombre) {
         if (nombre == null || nombre.isBlank()) {
@@ -52,7 +54,15 @@ public class Mascota {
         }
         this.edad = edad;
     }
-    //No se expone el historial directamente para proteger la colección interna
+
+    public void setClave(String clave) {
+        if (clave == null || clave.isBlank()) {
+            throw new IllegalArgumentException("La clave no puede estar vacía.");
+        }
+        this.clave = clave;
+    }
+
+    // === Getters ===
 
     public String getNombre() {
         return nombre;
@@ -64,6 +74,10 @@ public class Mascota {
 
     public int getEdad() {
         return edad;
+    }
+
+    public String getClave() {
+        return clave;
     }
 
 }
