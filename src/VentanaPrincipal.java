@@ -50,6 +50,10 @@ public class VentanaPrincipal extends JFrame {
         menuArchivo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         JMenuItem itemNuevoRegistro = new JMenuItem("Nuevo registro");
         itemNuevoRegistro.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        JMenuItem itemAgendarConsulta = new JMenuItem("Agendar Consulta");
+        itemAgendarConsulta.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        itemAgendarConsulta.addActionListener(e -> agendarConsulta());
+        menuArchivo.add(itemAgendarConsulta);
         JMenuItem itemSalir = new JMenuItem("Salir");
         itemSalir.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 
@@ -218,6 +222,103 @@ public class VentanaPrincipal extends JFrame {
         escritorio.add(form);
         form.setVisible(true);
 }
+
+    // FORMULARIO PARA AGENDAR CONSULTA
+    private void agendarConsulta() {
+        JInternalFrame formConsulta = new JInternalFrame("Agendar Consulta", true, true, true, true);
+        formConsulta.setSize(450, 350);
+        formConsulta.setLayout(new GridBagLayout());
+        formConsulta.getContentPane().setBackground(Color.WHITE);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Seleccionar mascota
+        JLabel lblMascota = new JLabel("Mascota:");
+        lblMascota.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        JComboBox<String> comboMascotas = new JComboBox<>();
+        for (Mascota m : listaPacientes) {
+            comboMascotas.addItem(m.getNombre());
+        }
+        gbc.gridx = 0; gbc.gridy = 0;
+        formConsulta.add(lblMascota, gbc);
+        gbc.gridx = 1;
+        formConsulta.add(comboMascotas, gbc);
+
+        // Fecha
+        JLabel lblFecha = new JLabel("Fecha (AAAA/MM/DD):");
+        lblFecha.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        JTextField txtFecha = new JTextField();
+        gbc.gridx = 0; gbc.gridy++;
+        formConsulta.add(lblFecha, gbc);
+        gbc.gridx = 1;
+        formConsulta.add(txtFecha, gbc);
+
+        // Servicio deseado
+        JLabel lblServicio = new JLabel("Servicio:");
+        lblServicio.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        String[] servicios = {"Vacunación", "Peluquería", "Cirugía", "Urgencias", "Medicina General"};
+        JComboBox<String> comboServicio = new JComboBox<>(servicios);
+        gbc.gridx = 0; gbc.gridy++;
+        formConsulta.add(lblServicio, gbc);
+        gbc.gridx = 1;
+        formConsulta.add(comboServicio, gbc);
+
+        // Comentario adicional
+        JLabel lblComentario = new JLabel("Comentario adicional:");
+        lblComentario.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        JTextField txtComentario = new JTextField();
+        txtComentario.setPreferredSize(new Dimension(150, 25));
+        gbc.gridx = 0; gbc.gridy++;
+        formConsulta.add(lblComentario, gbc);
+        gbc.gridx = 1;
+        formConsulta.add(txtComentario, gbc);
+
+
+        // Botón confirmar
+        JButton btnConfirmar = new JButton("Agendar");
+        btnConfirmar.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        btnConfirmar.addActionListener(e -> {
+            String mascota = (String) comboMascotas.getSelectedItem();
+            String fecha = txtFecha.getText().trim();
+            String comentario = txtComentario.getText().trim();
+            String servicio = (String) comboServicio.getSelectedItem();
+
+            if (mascota == null || fecha.isEmpty() || comentario.isEmpty() || servicio == null) {
+                JOptionPane.showMessageDialog(formConsulta, "Por favor completa todos los campos.");
+                return;
+            }
+
+            try {
+                // Crear la consulta usando la clase modelo
+                Consulta nuevaConsulta = new Consulta(fecha, mascota, servicio, comentario);
+
+                JOptionPane.showMessageDialog(formConsulta,
+                        "✅ Consulta agendada:\n" +
+                                "Código: " + nuevaConsulta.getCodigo() +
+                                "\nMascota: " + nuevaConsulta.getMascota() +
+                                "\nFecha: " + nuevaConsulta.getFecha() +
+                                "\nServicio: " + nuevaConsulta.getServicio() +
+                                "\nComentario: " + nuevaConsulta.getComentario(),
+                        "Consulta Agendada", JOptionPane.INFORMATION_MESSAGE);
+                formConsulta.dispose();
+            } catch (IllegalArgumentException ex) {
+                // Si hay error en formato de fecha
+                JOptionPane.showMessageDialog(formConsulta, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+
+        gbc.gridx = 0; gbc.gridy++;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        formConsulta.add(btnConfirmar, gbc);
+
+        escritorio.add(formConsulta);
+        formConsulta.setVisible(true);
+    }
+
 
     //TABLA DE PACIENTES CON BOTÓN ELIMINAR
     private void mostrarTablaPacientes() {
