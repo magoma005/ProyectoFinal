@@ -40,6 +40,49 @@ public class VentanaPrincipal extends JFrame {
         escritorio.setBackground(Color.WHITE);
         add(escritorio, BorderLayout.CENTER);
 
+        // PANEL DE BIENVENIDA
+        JPanel panelBienvenida = new JPanel();
+        panelBienvenida.setBackground(Color.WHITE);
+        panelBienvenida.setLayout(new BoxLayout(panelBienvenida, BoxLayout.Y_AXIS));
+
+        // Logo centrado
+        ImageIcon iconoLogo = new ImageIcon(getClass().getResource("/imagenes/logo2.jpg"));
+        Image imagenLogo = iconoLogo.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        JLabel lblLogo = new JLabel(new ImageIcon(imagenLogo));
+        lblLogo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelBienvenida.add(Box.createVerticalStrut(20)); // Espacio superior
+        panelBienvenida.add(lblLogo);
+        // Texto de bienvenida
+        JLabel lblBienvenida = new JLabel("Bienvenido a PetControl");
+        lblBienvenida.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        lblBienvenida.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelBienvenida.add(Box.createVerticalStrut(20));
+        panelBienvenida.add(lblBienvenida);
+        // Mensaje guía
+        JLabel lblMensaje = new JLabel("Selecciona una opción en el menú superior para comenzar.");
+        lblMensaje.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lblMensaje.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelBienvenida.add(Box.createVerticalStrut(10));
+        panelBienvenida.add(lblMensaje);
+
+        JButton btnAccesoPacientes = new JButton("Ver pacientes");
+        btnAccesoPacientes.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnAccesoPacientes.addActionListener(e -> mostrarTablaPacientes());
+        panelBienvenida.add(Box.createVerticalStrut(20));
+        panelBienvenida.add(btnAccesoPacientes);
+
+        JButton btnAccesoConsulta = new JButton("Agendar consulta");
+        btnAccesoConsulta.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnAccesoConsulta.addActionListener(e -> agendarConsulta());
+        panelBienvenida.add(Box.createVerticalStrut(10));
+        panelBienvenida.add(btnAccesoConsulta);
+        panelBienvenida.add(Box.createVerticalGlue()); // Empuja contenido hacia arriba
+
+        //Panel de bienvenida al escritorio
+        panelBienvenida.setBounds(200, 50, 400, 400);
+        escritorio.add(panelBienvenida);
+
+
         //PIE DE PÁGINA CON INFORMACIÓN
         JLabel piePagina = new JLabel("© 2025 PetControl. Todos los derechos reservados.", SwingConstants.CENTER);
         piePagina.setFont(new Font("Segoe UI", Font.ITALIC, 12));
