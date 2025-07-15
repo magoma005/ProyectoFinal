@@ -120,6 +120,7 @@ public class VentanaPrincipal extends JFrame {
         JMenuItem itemConsultas = new JMenuItem("Consultas");
         itemConsultas.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         itemConsultas.addActionListener(e -> mostrarTablaConsultas());
+
          // Acción pacientes
         itemPacientes.addActionListener(e -> mostrarTablaPacientes());
 
@@ -225,7 +226,6 @@ public class VentanaPrincipal extends JFrame {
         JButton btnRegistrar = new JButton("Registrar");
         btnRegistrar.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnRegistrar.setPreferredSize(new Dimension(100, 30));
-
         btnRegistrar.addActionListener(e -> {
             String nombre = txtNombre.getText().trim();
             String clave = new String(txtClave.getPassword()).trim();
@@ -251,7 +251,7 @@ public class VentanaPrincipal extends JFrame {
             String especie = (String) comboEspecie.getSelectedItem();
             int edad = (int) spinnerEdad.getValue();
 
-            // Usar constructor con clave
+            // Uso del constructor
             Mascota m = new Mascota(nombre, especie, edad, clave);
             listaPacientes.add(m);
 
@@ -395,8 +395,6 @@ public class VentanaPrincipal extends JFrame {
                 barraProgreso.setValue(valor + 5);
             } else {
                 timer.stop();
-
-// === TABLA DE PACIENTES ===
                 String[] columnas = {"Nombre", "Especie", "Edad"};
                 DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
                 for (Mascota m : listaPacientes) {
@@ -406,8 +404,7 @@ public class VentanaPrincipal extends JFrame {
                 JTable tabla = new JTable(modelo);
                 tabla.getTableHeader().setBackground(new Color(173, 216, 230));
                 tabla.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
-
-// === Botón eliminar paciente ===
+                //Botón eliminar paciente
                 JButton btnEliminar = new JButton("Eliminar paciente");
                 btnEliminar.addActionListener(ev -> {
                     // Mostrar inputs para nombre y clave del paciente a eliminar
@@ -439,7 +436,7 @@ public class VentanaPrincipal extends JFrame {
                     }
                 });
 
-// === Botón actualizar paciente ===
+                //Botón actualizar paciente
                 JButton btnActualizar = new JButton("Actualizar paciente");
                 btnActualizar.addActionListener(ev -> {
                     // Pedir nombre y clave para buscar al paciente
@@ -495,7 +492,7 @@ public class VentanaPrincipal extends JFrame {
                     }
                 });
 
-// === Panel inferior con botones ===
+                //Panel inferior con botones
                 JPanel panelBotones = new JPanel();
                 panelBotones.add(btnEliminar);
                 panelBotones.add(btnActualizar);
@@ -506,7 +503,6 @@ public class VentanaPrincipal extends JFrame {
                 frameTabla.add(panelBotones, BorderLayout.SOUTH);
                 frameTabla.revalidate();
                 frameTabla.repaint();
-
             }
         });
         timer.start();
@@ -534,7 +530,6 @@ public class VentanaPrincipal extends JFrame {
         JTable tabla = new JTable(modelo);
         tabla.getTableHeader().setBackground(new Color(173, 216, 230));
         tabla.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
-
         JScrollPane scrollTabla = new JScrollPane(tabla);
         frameTabla.add(scrollTabla, BorderLayout.CENTER);
 
@@ -546,7 +541,6 @@ public class VentanaPrincipal extends JFrame {
     public static void main(String[] args) {
         // Mostrar splash antes de iniciar app
         mostrarSplashScreen();
-
         // Lanzar ventana principal
         SwingUtilities.invokeLater(() -> new VentanaPrincipal());
     }
