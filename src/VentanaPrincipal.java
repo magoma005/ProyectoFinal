@@ -9,6 +9,7 @@ public class VentanaPrincipal extends JFrame {
 
     private JDesktopPane escritorio;
     private ArrayList<Mascota> listaPacientes = new ArrayList<>();
+    private ArrayList<Consulta> listaConsultas = new ArrayList<>();
 
     public VentanaPrincipal() {
         //CONFIGURACIÓN DE LA VENTANA PRINCIPAL
@@ -75,9 +76,13 @@ public class VentanaPrincipal extends JFrame {
         itemPacientes.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         JMenuItem itemConsultas = new JMenuItem("Consultas");
         itemConsultas.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-
-        // Acción pacientes
+        itemConsultas.addActionListener(e -> mostrarTablaConsultas());
+         // Acción pacientes
         itemPacientes.addActionListener(e -> mostrarTablaPacientes());
+
+        // Acción consultas
+        itemConsultas.addActionListener(e -> mostrarTablaConsultas());
+
         menuVista.add(itemPacientes);
         menuVista.add(itemConsultas);
         barraMenu.add(menuArchivo);
@@ -85,7 +90,10 @@ public class VentanaPrincipal extends JFrame {
         setJMenuBar(barraMenu);
 
         setVisible(true);
+
     }
+
+
 
     // Creacion de un Splash Screen con su logo y carga
     public static void mostrarSplashScreen() {
@@ -294,6 +302,9 @@ public class VentanaPrincipal extends JFrame {
                 // Crear la consulta usando la clase modelo
                 Consulta nuevaConsulta = new Consulta(fecha, mascota, servicio, comentario);
 
+                // Guardar en la lista de consultas
+                listaConsultas.add(nuevaConsulta);
+
                 JOptionPane.showMessageDialog(formConsulta,
                         "✅ Consulta agendada:\n" +
                                 "Código: " + nuevaConsulta.getCodigo() +
@@ -310,6 +321,7 @@ public class VentanaPrincipal extends JFrame {
         });
 
 
+
         gbc.gridx = 0; gbc.gridy++;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
@@ -320,7 +332,7 @@ public class VentanaPrincipal extends JFrame {
     }
 
 
-    //TABLA DE PACIENTES CON BOTÓN ELIMINAR
+    //TABLA DE PACIENTES
     private void mostrarTablaPacientes() {
         JInternalFrame frameTabla = new JInternalFrame("Lista de pacientes", true, true, true, true);
         frameTabla.setSize(600, 400);
@@ -459,6 +471,34 @@ public class VentanaPrincipal extends JFrame {
         escritorio.add(frameTabla);
         frameTabla.setVisible(true);
     }
+
+    // TABLA DE CONSULTAS AGENDADAS
+    private void mostrarTablaConsultas() {
+        JInternalFrame frameTabla = new JInternalFrame("Consultas agendadas", true, true, true, true);
+        frameTabla.setSize(600, 400);
+        frameTabla.setLayout(new BorderLayout());
+
+        // Columnas de la tabla
+        String[] columnas = {"Código", "Mascota", "Fecha", "Servicio", "Comentario"};
+        DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
+
+        // Filas con los datos de cada consulta
+        for (Consulta c : listaConsultas) {
+            Object[] fila = {c.getCodigo(), c.getMascota(), c.getFecha(), c.getServicio(), c.getComentario()};
+            modelo.addRow(fila);
+        }
+
+        JTable tabla = new JTable(modelo);
+        tabla.getTableHeader().setBackground(new Color(173, 216, 230));
+        tabla.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
+
+        JScrollPane scrollTabla = new JScrollPane(tabla);
+        frameTabla.add(scrollTabla, BorderLayout.CENTER);
+
+        escritorio.add(frameTabla);
+        frameTabla.setVisible(true);
+    }
+
 
     public static void main(String[] args) {
         // Mostrar splash antes de iniciar app
