@@ -1,79 +1,77 @@
-# 🐾 Proyecto Veterinaria – Ficha Clínica
+# 🐾 PetControl
 
-## 📌 Descripción
+**PetControl** es un sistema de gestión para clínicas veterinarias que permite:
 
-Este proyecto es una aplicación de consola desarrollada en **Java** que gestiona la información de propietarios, mascotas, consultas y veterinarios en un sistema veterinario básico.
+- Registrar pacientes (mascotas) con su información.
+- Agendar consultas para diferentes servicios veterinarios.
+- Visualizar la lista de pacientes y sus datos.
+- Consultar las citas agendadas.
 
-Permite:
-- Registrar propietarios con sus datos personales.
-- Registrar múltiples mascotas por propietario.
-- Registrar múltiples consultas por mascota, asignadas a veterinarios.
-- Generar códigos automáticos únicos para consultas y mascotas.
-- Visualizar la ficha clínica completa en consola.
+## ✨ Características
 
----
+✅ Registro de pacientes con nombre, especie, edad y clave.  
+✅ Agenda de consultas con servicio y comentario adicional.  
+✅ Interfaz gráfica amigable con Java Swing.  
+✅ Panel de bienvenida con logo y mensajes de guía.  
+✅ Menú de navegación intuitivo para registrar y consultar datos.
 
-## 🚀 Tecnologías utilizadas
+## 🖥️ Requisitos
 
-- **Java SE 17**
-- IDE: NetBeans / IntelliJ IDEA
+- Java JDK 17 o superior.
+- IDE recomendado: **IntelliJ IDEA** o **NetBeans**.
 
----
+## ⚙️ Instalación y ejecución
 
-## 🗃️ Estructura de clases
+1. Clona este repositorio:
+   ```bash
+   git clone https://github.com/tuusuario/PetControl.git
+   cd PetControl
+2. Abre el proyecto en tu IDE favorito.
 
-| Clase | Descripción |
-|---|---|
-| `Propietario` | Gestiona la información del propietario y su lista de mascotas. |
-| `Mascota` | Contiene datos de la mascota y delega su historial. |
-| `Consulta` | Registra la información de cada consulta médica. |
-| `Veterinario` | Guarda los datos del veterinario asignado a la consulta. |
-| `Historial` | Maneja la lista de consultas de una mascota. |
-| `IDGenerator` | Genera códigos automáticos únicos para consultas y mascotas. |
-| `Main` | Contiene el flujo principal de registro y muestra de información. |
+3. Asegúrate de tener configurado el JDK 17.
 
----
+4. Ejecuta la clase Main o VentanaPrincipal para iniciar el sistema.
 
+🚀 Uso
+Desde el menú Archivo, puedes:
 
-## 💡 Cambios implementados (Refactorización)
+Registrar un nuevo paciente.
 
-✔️ Encapsulamiento completo de atributos.  
-✔️ Setters con validación (no se aceptan campos vacíos o inválidos).  
-✔️ **Uso de `LocalDate`** para el manejo correcto de fechas.  
-✔️ Implementación de la clase `Historial` para delegar la gestión de consultas.  
-✔️ Generación de IDs automáticos con `IDGenerator`.  
-✔️ Comentarios explicativos en el código para evidenciar las mejoras.  
-✔️ Protegida la colección interna de mascotas (`ArrayList`).  
-✔️ Código limpio, estructurado y listo para ejecución desde consola.
+Agendar una consulta para una mascota existente.
 
----
+Desde el menú Vista, puedes:
 
-## 📝 Ejecución
+Ver la lista de pacientes.
 
-1. Compila el proyecto:
-    ```bash
-    javac *.java
-    ```
+Ver la lista de consultas agendadas.
 
-2. Ejecuta la clase Main:
-    ```bash
-    java Main
-    ```
+Explora los servicios en el panel izquierdo (JTree).
 
-3. Ingresa los datos según lo solicite el programa en consola.
+📁 Estructura de carpetas
+css
+Copiar
+Editar
+src/
+ ├── imagenes/
+ │    └── logo.jpg
+ ├── Consulta.java
+ ├── CrudMascotas.java
+ ├── Historial.java
+ ├── IDGenerator.java
+ ├── Main.java
+ ├── Mascota.java
+ ├── Propietario.java
+ ├── VentanaPrincipal.java
+ └── Veterinario.java
+👨‍💻 Autor
+Miguel Angel Guarin
 
----
+❤️ Créditos
+Este proyecto fue creado como parte de prácticas de programación orientada a objetos y desarrollo de interfaces gráficas en Java.
 
-## ✅ Resultado esperado
+📌 Notas
+No requiere persistencia aún (no implementa DAO o bases de datos).
 
-Al finalizar, se mostrará en consola la **ficha clínica completa**, incluyendo:
+El logo se encuentra en src/imagenes/logo.jpg y puede reemplazarse por el de tu clínica.
 
-- Datos del propietario
-- Información de cada mascota
-- Consultas médicas con fecha y veterinario asignado
-
----
-✨ Autor
-Taller práctico – Programación Orientada a Objetos
-💻 Miguel Angel Guarin Ospina
-📧 mago123005@gmail.com
+Este sistema es una versión inicial, ideal para prácticas y ampliaciones futuras (como exportar datos o usar MySQL).
