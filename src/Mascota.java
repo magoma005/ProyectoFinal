@@ -2,7 +2,7 @@ public class Mascota {
     private String nombre;
     private String especie;
     private int edad;
-    private String clave; // ✅ NUEVO: clave para seguridad
+    private String clave; // Clave para seguridad
     private Historial historial; // Se reemplazó ArrayList<Consulta> por la clase Historial para mejor encapsulamiento.
 
     public Mascota(String nombre, String especie, int edad) {
@@ -14,7 +14,7 @@ public class Mascota {
     }
 
     public Mascota(String nombre, String especie, int edad, String clave) {
-        // ✅ Nuevo constructor con clave
+        //Constructor con clave
         setNombre(nombre);
         setEspecie(especie);
         setEdad(edad);
