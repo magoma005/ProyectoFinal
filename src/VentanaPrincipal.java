@@ -387,7 +387,6 @@ public class VentanaPrincipal extends JFrame {
         barraProgreso.setStringPainted(true);
         panelCarga.add(barraProgreso, BorderLayout.NORTH);
         frameTabla.add(panelCarga, BorderLayout.CENTER);
-
         Timer timer = new Timer(50, null);
         timer.addActionListener(e -> {
             int valor = barraProgreso.getValue();
@@ -395,6 +394,7 @@ public class VentanaPrincipal extends JFrame {
                 barraProgreso.setValue(valor + 5);
             } else {
                 timer.stop();
+                //Aqui recien se crea la tabla
                 String[] columnas = {"Nombre", "Especie", "Edad"};
                 DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
                 for (Mascota m : listaPacientes) {
@@ -404,6 +404,7 @@ public class VentanaPrincipal extends JFrame {
                 JTable tabla = new JTable(modelo);
                 tabla.getTableHeader().setBackground(new Color(173, 216, 230));
                 tabla.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
+
                 //Botón eliminar paciente
                 JButton btnEliminar = new JButton("Eliminar paciente");
                 btnEliminar.addActionListener(ev -> {
