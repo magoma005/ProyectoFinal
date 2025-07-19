@@ -5,17 +5,54 @@
  */
 
 public class Cita extends EventoClinico {
-    private String servicio;
+    private String hora;
+    private String veterinario;
+    private String estado;
 
-    //Constructor
-    public Cita(String fecha, String servicio) {
+    public Cita(String fecha, String hora, String veterinario, String estado) {
         super(fecha);
-        setServicio(servicio);
+        //setServicio(servicio);
+        setHora(hora);
+        setVeterinario(veterinario);
+        setEstado(estado);
     }
 
-    //Setter con validación
+    //Setters
+    public void setHora(String hora) {
+        if (hora == null || hora.isBlank()) {
+            throw new IllegalArgumentException("La hora no puede estar vacío.");
+        }
+        this.hora = hora;
+    }
 
-    public void setServicio(String servicio) {
+    public void setVeterinario(String veterinario) {
+        if (veterinario == null || veterinario.isBlank()) {
+            throw new IllegalArgumentException("El nombre del veterinario no puede estar vacío.");
+        }
+        this.veterinario = veterinario;
+    }
+
+    public void setEstado(String estado) {
+        if (estado == null || estado.isBlank()) {
+            throw new IllegalArgumentException("El estado de la cita no puede estar vacía.");
+        }
+        this.estado = estado;
+    }
+
+    //Getters
+    public String getHora() {
+        return hora;
+    }
+
+    public String getVeterinario() {
+        return veterinario;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    /**public void setServicio(String servicio) {
         if (servicio == null || servicio.isBlank()) {
             throw new IllegalArgumentException("El servicio no puede estar vacío.");
         }
@@ -26,13 +63,16 @@ public class Cita extends EventoClinico {
 
     public String getServicio() {
         return servicio;
-    }
+    }*/
 
-    // === Implementación de método abstracto ===
+    //Implementación de método abstracto
 
     @Override
     public void mostrarDetalle() {
-        System.out.println("📅 Cita para el " + getFecha());
-        System.out.println("🔧 Servicio: " + servicio);
-    }
+            System.out.println("[Cita] " + getFecha() + " " + hora);
+            System.out.println("Veterinario: " + veterinario);
+            System.out.println("Estado: " + estado);
+            System.out.println();
+        }
 }
+

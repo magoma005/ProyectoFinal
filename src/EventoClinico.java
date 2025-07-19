@@ -3,35 +3,50 @@
  * Es la superclase de Consulta, Vacuna y Cita, permitiendo polimorfismo en registros clínicos.
  * Contiene información común como la fecha.
  */
-public abstract class EventoClinico {
-    private String fecha;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
-    //Constructor
+public abstract class EventoClinico {
+    protected LocalDate fecha;
+
+    // Este Constructor vacío es necesario para subclases que no pasen fecha en super()
+    public EventoClinico() {}
+
     public EventoClinico(String fecha) {
         setFecha(fecha);
     }
 
-    // Setter con validación
-
+    // Set con String
     public void setFecha(String fecha) {
         if (fecha == null || fecha.isBlank()) {
             throw new IllegalArgumentException("La fecha no puede estar vacía.");
         }
+        try {
+            this.fecha = LocalDate.parse(fecha);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Formato de fecha inválido. Usa AAAA-MM-DD.");
+        }
+    }
+
+    // Set con LocalDate
+    public void setFecha(LocalDate fecha) {
+        if (fecha == null) {
+            throw new IllegalArgumentException("La fecha no puede ser nula.");
+        }
         this.fecha = fecha;
     }
 
-    //Getter
-
     public String getFecha() {
+        return fecha.toString();
+    }
+
+    public LocalDate getFechaLocalDate() {
         return fecha;
     }
 
-    /**
-     * Método abstracto que muestra los detalles del evento clínico.
-     * Implementado en subclases como Consulta, Vacuna y Cita.
-     */
     public abstract void mostrarDetalle();
 }
+
 
 /*
 ────────────────────────────────────────────

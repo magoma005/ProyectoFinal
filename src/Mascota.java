@@ -1,38 +1,21 @@
+import java.util.ArrayList;
+
 public class Mascota {
     private String nombre;
     private String especie;
     private int edad;
     private String clave; // Clave para seguridad
-    private Historial historial; // Se reemplazó ArrayList<Consulta> por la clase Historial para mejor encapsulamiento.
-
-    public Mascota(String nombre, String especie, int edad) {
-        // Refactor: usar setters + historial
-        setNombre(nombre);
-        setEspecie(especie);
-        setEdad(edad);
-        this.historial = new Historial();
-    }
+    private ArrayList<EventoClinico> historial;
 
     public Mascota(String nombre, String especie, int edad, String clave) {
-        //Constructor con clave
         setNombre(nombre);
         setEspecie(especie);
         setEdad(edad);
         setClave(clave);
-        this.historial = new Historial();
+        historial = new ArrayList<>();
     }
 
-    public void agregarConsulta(Consulta consulta) {
-        historial.agregarConsulta(consulta); // delegamos al historial
-    }
-
-    public void mostrarHistorial() {
-        System.out.println("📋 Mascota: " + nombre + " | Especie: " + especie + " | Edad: " + edad + " años");
-        System.out.println("Historial de consultas:");
-        historial.mostrarConsultas();
-    }
-
-    // === Setters con validación ===
+    //Setters con su respectiva validación
 
     public void setNombre(String nombre) {
         if (nombre == null || nombre.isBlank()) {
@@ -80,4 +63,21 @@ public class Mascota {
         return clave;
     }
 
+    /**public void agregarConsulta(Consulta consulta) {
+        historial.agregarConsulta(consulta); // delegamos al historial
+    }**/
+
+    // Método para agregar un evento clínico al historial
+    public void agregarEvento(EventoClinico evento) {
+        if (evento != null) {
+            historial.add(evento);
+        }
+    }
+
+    public void mostrarHistorial() {
+        System.out.println("📋 Historial clínico de " + nombre + ":");
+        for (EventoClinico e : historial) {
+            e.mostrarDetalle(); // se llama al método override de la subclase
+        }
+    }
 }

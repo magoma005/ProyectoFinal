@@ -1,35 +1,44 @@
-//Se creó la clase Historial para delegar el manejo de consultas de Mascota.
-
 import java.util.ArrayList;
 
+/**
+ * Clase Historial.
+ * Administra todos los eventos clínicos de una mascota:
+ * consultas, vacunas y citas.
+ */
 public class Historial {
-    private ArrayList<Consulta> consultas;
+
+    // Lista general de eventos clínicos
+    private ArrayList<EventoClinico> eventos;
 
     public Historial() {
-        this.consultas = new ArrayList<>();
+        this.eventos = new ArrayList<>();
     }
 
-    //Se encapsula la lista de consultas.
-
-    public void agregarConsulta(Consulta consulta) {
-        if (consulta != null) {
-            consultas.add(consulta);
+    /**
+     * Agrega un evento clínico al historial.
+     */
+    public void agregarEvento(EventoClinico evento) {
+        if (evento != null) {
+            eventos.add(evento);
         }
     }
 
-    //Método mostrarConsultas() recorre e imprime cada consulta de forma ordenada.
-
-    public void mostrarConsultas() {
-        if (consultas.isEmpty()) {
-            System.out.println("⚠️ Sin consultas registradas.");
+    /**
+     * Muestra todos los eventos clínicos registrados usando polimorfismo.
+     */
+    public void mostrarEventos() {
+        if (eventos.isEmpty()) {
+            System.out.println("⚠️ Sin eventos clínicos registrados.");
         } else {
-            for (Consulta c : consultas) {
-                c.mostrarConsulta();
+            System.out.println("📋 Historial clínico:");
+            for (EventoClinico e : eventos) {
+                e.mostrarDetalle(); // Llama al método override según su tipo
                 System.out.println("--------------------------");
             }
         }
     }
+
+    public ArrayList<EventoClinico> getEventos() {
+        return eventos;
+    }
 }
-
-
-

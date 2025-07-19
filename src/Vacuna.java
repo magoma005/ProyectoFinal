@@ -5,35 +5,60 @@
  */
 
 public class Vacuna extends EventoClinico {
-    private String nombreVacuna;
+    private String tipo;
+    private String lote;
+    private String proximaDosis;
 
-    //Constructor
-    public Vacuna(String fecha, String nombreVacuna) {
+    public Vacuna(String fecha, String tipo, String lote, String proximaDosis) {
         super(fecha);
-        setNombreVacuna(nombreVacuna);
+        setTipo(tipo);
+        setLote(lote);
+        setProximaDosis(proximaDosis);
     }
 
-    //Setter con validación
+    //Setters con su validación
 
-    public void setNombreVacuna(String nombreVacuna) {
-        if (nombreVacuna == null || nombreVacuna.isBlank()) {
-            throw new IllegalArgumentException("El nombre de la vacuna no puede estar vacío.");
+    public void setTipo(String tipo) {
+        if (tipo == null || tipo.isBlank()) {
+            throw new IllegalArgumentException("El tipo de vacuna no puede estar vacío.");
         }
-        this.nombreVacuna = nombreVacuna;
+        this.tipo = tipo;
     }
+
+    public void setLote(String lote) {
+        if (lote == null || lote.isBlank()) {
+            throw new IllegalArgumentException("El Lote de vacuna no puede estar vacío.");
+        }
+        this.lote = lote;
+    }
+
+    public void setProximaDosis(String proximaDosis) {
+        if (proximaDosis == null || proximaDosis.isBlank()) {
+            throw new IllegalArgumentException("La info de la proxima dosis no puede estar vacío.");
+        }
+        this.proximaDosis = proximaDosis;
+    }
+
 
     //Getter
 
-    public String getNombreVacuna() {
-        return nombreVacuna;
+    public String getTipo() {
+        return tipo;
+    }
+
+    public String getLote() {
+        return lote;
     }
 
     // === Implementación de método abstracto ===
 
     @Override
     public void mostrarDetalle() {
-        System.out.println("💉 Vacuna aplicada: " + nombreVacuna);
-        System.out.println("📅 Fecha de aplicación: " + getFecha());
+        System.out.println("[Vacuna] " + getFecha());
+        System.out.println("Tipo: " + tipo);
+        System.out.println("Lote: " + lote);
+        System.out.println("Próxima dosis: " + proximaDosis);
+        System.out.println();
     }
 }
 
