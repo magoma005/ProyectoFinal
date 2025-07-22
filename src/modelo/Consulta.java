@@ -1,3 +1,7 @@
+package modelo;
+
+import util.IDGenerator;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 

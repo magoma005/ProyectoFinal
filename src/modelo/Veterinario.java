@@ -1,3 +1,5 @@
+package modelo;
+
 /**
  Esta clase ahora extiende de Persona y añade la especialidad médica.
  * Incluye métodos para mostrar su perfil.

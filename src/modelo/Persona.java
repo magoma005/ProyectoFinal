@@ -1,3 +1,5 @@
+package modelo;
+
 /**
  * Clase que representa a cualquier persona en el sistema,
  * ya sea propietario, veterinario u otro tipo de usuario futuro.

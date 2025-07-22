@@ -1,4 +1,7 @@
-// [IMPORTS]
+package vistas;// [IMPORTS]
+import modelo.Consulta;
+import modelo.Mascota;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -67,7 +70,7 @@ public class VentanaPrincipal extends JFrame {
 
         JButton btnAccesoPacientes = new JButton("Ver pacientes");
         btnAccesoPacientes.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnAccesoPacientes.addActionListener(e -> mostrarTablaPacientes());
+        btnAccesoPacientes.addActionListener(e -> new FormMascota(listaPacientes).setVisible(true));
         panelBienvenida.add(Box.createVerticalStrut(20));
         panelBienvenida.add(btnAccesoPacientes);
 
@@ -122,7 +125,7 @@ public class VentanaPrincipal extends JFrame {
         itemConsultas.addActionListener(e -> mostrarTablaConsultas());
 
          // Acción pacientes
-        itemPacientes.addActionListener(e -> mostrarTablaPacientes());
+        itemPacientes.addActionListener(e -> new FormMascota(listaPacientes).setVisible(true));
 
         // Acción consultas
         itemConsultas.addActionListener(e -> mostrarTablaConsultas());
@@ -374,143 +377,6 @@ public class VentanaPrincipal extends JFrame {
         formConsulta.setVisible(true);
     }
 
-
-    //TABLA DE PACIENTES
-    private void mostrarTablaPacientes() {
-        JInternalFrame frameTabla = new JInternalFrame("Lista de pacientes", true, true, true, true);
-        frameTabla.setSize(600, 400);
-        frameTabla.setLayout(new BorderLayout());
-
-        // Panel superior con progress bar
-        JPanel panelCarga = new JPanel(new BorderLayout());
-        JProgressBar barraProgreso = new JProgressBar(0, 100);
-        barraProgreso.setStringPainted(true);
-        panelCarga.add(barraProgreso, BorderLayout.NORTH);
-        frameTabla.add(panelCarga, BorderLayout.CENTER);
-        Timer timer = new Timer(50, null);
-        timer.addActionListener(e -> {
-            int valor = barraProgreso.getValue();
-            if (valor < 100) {
-                barraProgreso.setValue(valor + 5);
-            } else {
-                timer.stop();
-                //Aqui recien se crea la tabla
-                String[] columnas = {"Nombre", "Especie", "Edad"};
-                DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
-                for (Mascota m : listaPacientes) {
-                    Object[] fila = {m.getNombre(), m.getEspecie(), m.getEdad()};
-                    modelo.addRow(fila);
-                }
-                JTable tabla = new JTable(modelo);
-                tabla.getTableHeader().setBackground(new Color(173, 216, 230));
-                tabla.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
-
-                //Botón eliminar paciente
-                JButton btnEliminar = new JButton("Eliminar paciente");
-                btnEliminar.addActionListener(ev -> {
-                    // Mostrar inputs para nombre y clave del paciente a eliminar
-                    JTextField campoNombre = new JTextField();
-                    JPasswordField campoClave = new JPasswordField();
-                    Object[] mensaje = {
-                            "Nombre del paciente a eliminar:", campoNombre,
-                            "Clave del paciente:", campoClave
-                    };
-                    int opcion = JOptionPane.showConfirmDialog(frameTabla, mensaje, "Eliminar paciente", JOptionPane.OK_CANCEL_OPTION);
-                    if (opcion == JOptionPane.OK_OPTION) {
-                        String nombreEliminar = campoNombre.getText().trim();
-                        String claveEliminar = new String(campoClave.getPassword()).trim();
-                        boolean encontrado = false;
-                        for (Mascota m : listaPacientes) {
-                            if (m.getNombre().equalsIgnoreCase(nombreEliminar) && m.getClave().equals(claveEliminar)) {
-                                listaPacientes.remove(m);
-                                encontrado = true;
-                                break;
-                            }
-                        }
-                        if (encontrado) {
-                            JOptionPane.showMessageDialog(frameTabla, "✅ Paciente eliminado exitosamente.");
-                            mostrarTablaPacientes(); // refrescar tabla
-                            frameTabla.dispose(); // cerrar esta ventana para evitar duplicados
-                        } else {
-                            JOptionPane.showMessageDialog(frameTabla, "⚠️ No se encontró un paciente con ese nombre y clave.");
-                        }
-                    }
-                });
-
-                //Botón actualizar paciente
-                JButton btnActualizar = new JButton("Actualizar paciente");
-                btnActualizar.addActionListener(ev -> {
-                    // Pedir nombre y clave para buscar al paciente
-                    JTextField campoNombre = new JTextField();
-                    JPasswordField campoClave = new JPasswordField();
-                    Object[] mensaje = {
-                            "Nombre del paciente a actualizar:", campoNombre,
-                            "Clave del paciente:", campoClave
-                    };
-
-                    int opcion = JOptionPane.showConfirmDialog(frameTabla, mensaje, "Actualizar paciente", JOptionPane.OK_CANCEL_OPTION);
-                    if (opcion == JOptionPane.OK_OPTION) {
-                        String nombreBuscar = campoNombre.getText().trim();
-                        String claveBuscar = new String(campoClave.getPassword()).trim();
-
-                        Mascota mascotaEncontrada = null;
-                        for (Mascota m : listaPacientes) {
-                            if (m.getNombre().equalsIgnoreCase(nombreBuscar) && m.getClave().equals(claveBuscar)) {
-                                mascotaEncontrada = m;
-                                break;
-                            }
-                        }
-
-                        if (mascotaEncontrada != null) {
-                            // Formulario para editar datos de la mascota encontrada
-                            JTextField nuevoNombre = new JTextField(mascotaEncontrada.getNombre());
-                            JTextField nuevaEspecie = new JTextField(mascotaEncontrada.getEspecie());
-                            JSpinner nuevaEdad = new JSpinner(new SpinnerNumberModel(mascotaEncontrada.getEdad(), 0, 500, 1));
-                            JPasswordField nuevaClave = new JPasswordField(mascotaEncontrada.getClave());
-
-                            Object[] camposEditar = {
-                                    "Nuevo nombre:", nuevoNombre,
-                                    "Nueva especie:", nuevaEspecie,
-                                    "Nueva edad:", nuevaEdad,
-                                    "Nueva clave:", nuevaClave
-                            };
-
-                            int editar = JOptionPane.showConfirmDialog(frameTabla, camposEditar, "Editar datos paciente", JOptionPane.OK_CANCEL_OPTION);
-                            if (editar == JOptionPane.OK_OPTION) {
-                                // Actualizar con los nuevos datos usando setters validados
-                                mascotaEncontrada.setNombre(nuevoNombre.getText().trim());
-                                mascotaEncontrada.setEspecie(nuevaEspecie.getText().trim());
-                                mascotaEncontrada.setEdad((int) nuevaEdad.getValue());
-                                mascotaEncontrada.setClave(new String(nuevaClave.getPassword()).trim());
-
-                                JOptionPane.showMessageDialog(frameTabla, "✅ Datos actualizados exitosamente.");
-                                mostrarTablaPacientes(); // refrescar tabla
-                                frameTabla.dispose(); // cerrar esta ventana para evitar duplicados
-                            }
-                        } else {
-                            JOptionPane.showMessageDialog(frameTabla, "⚠️ No se encontró un paciente con ese nombre y clave.");
-                        }
-                    }
-                });
-
-                //Panel inferior con botones
-                JPanel panelBotones = new JPanel();
-                panelBotones.add(btnEliminar);
-                panelBotones.add(btnActualizar);
-
-                JScrollPane scrollTabla = new JScrollPane(tabla);
-                frameTabla.getContentPane().removeAll();
-                frameTabla.add(scrollTabla, BorderLayout.CENTER);
-                frameTabla.add(panelBotones, BorderLayout.SOUTH);
-                frameTabla.revalidate();
-                frameTabla.repaint();
-            }
-        });
-        timer.start();
-
-        escritorio.add(frameTabla);
-        frameTabla.setVisible(true);
-    }
 
     // TABLA DE CONSULTAS AGENDADAS
     private void mostrarTablaConsultas() {

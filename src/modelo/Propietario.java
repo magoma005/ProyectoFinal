@@ -1,3 +1,5 @@
+package modelo;
+
 import java.util.ArrayList;
 //Se mantuvieron los atributos privados para cumplir con el principio de encapsulamiento
 public class Propietario extends Persona {

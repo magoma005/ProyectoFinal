@@ -1,3 +1,5 @@
+package modelo;
+
 /**
  * Clase que representa una cita agendada para la mascota.
  * Extiende EventoClinico e implementa su método abstracto mostrarDetalle().

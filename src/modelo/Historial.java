@@ -1,10 +1,7 @@
-import java.util.ArrayList;
+/*import java.util.ArrayList;
 
-/**
- * Clase Historial.
- * Administra todos los eventos clínicos de una mascota:
- * consultas, vacunas y citas.
- */
+//Clase Historial. Administra todos los eventos clínicos de una mascota: consultas, vacunas y citas.
+
 public class Historial {
 
     // Lista general de eventos clínicos
@@ -14,18 +11,16 @@ public class Historial {
         this.eventos = new ArrayList<>();
     }
 
-    /**
-     * Agrega un evento clínico al historial.
-     */
+    //Agrega un evento clínico al historial.
+
     public void agregarEvento(EventoClinico evento) {
         if (evento != null) {
             eventos.add(evento);
         }
     }
 
-    /**
-     * Muestra todos los eventos clínicos registrados usando polimorfismo.
-     */
+    //Muestra todos los eventos clínicos registrados usando polimorfismo.
+
     public void mostrarEventos() {
         if (eventos.isEmpty()) {
             System.out.println("⚠️ Sin eventos clínicos registrados.");
@@ -41,4 +36,4 @@ public class Historial {
     public ArrayList<EventoClinico> getEventos() {
         return eventos;
     }
-}
+} */

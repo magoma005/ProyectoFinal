@@ -1,3 +1,10 @@
+package DAO;
+
+import modelo.Cita;
+import modelo.Consulta;
+import modelo.Mascota;
+import modelo.Vacuna;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 

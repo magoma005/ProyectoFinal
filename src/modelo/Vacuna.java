@@ -1,3 +1,5 @@
+package modelo;
+
 /**
  * Clase que representa la aplicación de una vacuna a la mascota.
  * Extiende EventoClinico e implementa su método abstracto mostrarDetalle().
