@@ -55,12 +55,14 @@ public class VentanaPrincipal extends JFrame {
         lblLogo.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelBienvenida.add(Box.createVerticalStrut(20)); // Espacio superior
         panelBienvenida.add(lblLogo);
+
         // Texto de bienvenida
         JLabel lblBienvenida = new JLabel("Bienvenido a PetControl");
         lblBienvenida.setFont(new Font("Segoe UI", Font.BOLD, 20));
         lblBienvenida.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelBienvenida.add(Box.createVerticalStrut(20));
         panelBienvenida.add(lblBienvenida);
+
         // Mensaje guía
         JLabel lblMensaje = new JLabel("Selecciona una opción en el menú superior para comenzar.");
         lblMensaje.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -70,7 +72,7 @@ public class VentanaPrincipal extends JFrame {
 
         JButton btnAccesoPacientes = new JButton("Ver pacientes");
         btnAccesoPacientes.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnAccesoPacientes.addActionListener(e -> new FormMascota(listaPacientes).setVisible(true));
+        btnAccesoPacientes.addActionListener(e -> new FormMascota().setVisible(true));
         panelBienvenida.add(Box.createVerticalStrut(20));
         panelBienvenida.add(btnAccesoPacientes);
 
@@ -122,13 +124,13 @@ public class VentanaPrincipal extends JFrame {
         itemPacientes.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         JMenuItem itemConsultas = new JMenuItem("Consultas");
         itemConsultas.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        itemConsultas.addActionListener(e -> mostrarTablaConsultas());
+        itemConsultas.addActionListener(e -> new FormConsulta().setVisible(true));
 
          // Acción pacientes
-        itemPacientes.addActionListener(e -> new FormMascota(listaPacientes).setVisible(true));
+        itemPacientes.addActionListener(e -> new FormMascota().setVisible(true));
 
         // Acción consultas
-        itemConsultas.addActionListener(e -> mostrarTablaConsultas());
+        itemConsultas.addActionListener(e -> new FormConsulta().setVisible(true));
 
         menuVista.add(itemPacientes);
         menuVista.add(itemConsultas);
@@ -139,8 +141,6 @@ public class VentanaPrincipal extends JFrame {
         setVisible(true);
 
     }
-
-
 
     // Creacion de un Splash Screen con su logo y carga
     public static void mostrarSplashScreen() {
@@ -365,9 +365,6 @@ public class VentanaPrincipal extends JFrame {
                 JOptionPane.showMessageDialog(formConsulta, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-
-
-
         gbc.gridx = 0; gbc.gridy++;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
@@ -376,34 +373,6 @@ public class VentanaPrincipal extends JFrame {
         escritorio.add(formConsulta);
         formConsulta.setVisible(true);
     }
-
-
-    // TABLA DE CONSULTAS AGENDADAS
-    private void mostrarTablaConsultas() {
-        JInternalFrame frameTabla = new JInternalFrame("Consultas agendadas", true, true, true, true);
-        frameTabla.setSize(600, 400);
-        frameTabla.setLayout(new BorderLayout());
-
-        // Columnas de la tabla
-        String[] columnas = {"Código", "Mascota", "Fecha", "Servicio", "Comentario"};
-        DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
-
-        // Filas con los datos de cada consulta
-        for (Consulta c : listaConsultas) {
-            Object[] fila = {c.getCodigo(), c.getMascota(), c.getFecha(), c.getServicio(), c.getComentario()};
-            modelo.addRow(fila);
-        }
-
-        JTable tabla = new JTable(modelo);
-        tabla.getTableHeader().setBackground(new Color(173, 216, 230));
-        tabla.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
-        JScrollPane scrollTabla = new JScrollPane(tabla);
-        frameTabla.add(scrollTabla, BorderLayout.CENTER);
-
-        escritorio.add(frameTabla);
-        frameTabla.setVisible(true);
-    }
-
 
     public static void main(String[] args) {
         // Mostrar splash antes de iniciar app

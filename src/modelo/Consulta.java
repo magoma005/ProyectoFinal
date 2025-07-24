@@ -27,7 +27,7 @@ public class Consulta extends EventoClinico {
         this.codigo = IDGenerator.generarCodigoConsulta();
     }
 
-    // Constructor simplificado para poder agendar consulta desde la Interfaz Gráfica de Usuario.
+    // Constructor simplificado para agendar consulta desde GUI.
     public Consulta(String fechaTexto, String mascota, String servicio, String comentario) {
         setFecha(fechaTexto);
         setMascota(mascota);
@@ -39,80 +39,58 @@ public class Consulta extends EventoClinico {
     public void setFecha(String fechaTexto) {
         try {
             LocalDate fechaParseada = LocalDate.parse(fechaTexto); // formato YYYY-MM-DD
-            super.setFecha(fechaParseada); // Usa el setter de EventoClinico
+            super.setFecha(fechaParseada);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Formato de fecha inválido. Usa YYYY-MM-DD");
         }
     }
 
     public void setMotivo(String motivo) {
-        if (motivo == null || motivo.isBlank()) {
-            throw new IllegalArgumentException("El motivo no puede estar vacío.");
-        }
+        if (motivo == null || motivo.isBlank()) throw new IllegalArgumentException("El motivo no puede estar vacío.");
         this.motivo = motivo;
     }
 
     public void setDiagnostico(String diagnostico) {
-        if (diagnostico == null || diagnostico.isBlank()) {
-            throw new IllegalArgumentException("El diagnóstico no puede estar vacío.");
-        }
+        if (diagnostico == null || diagnostico.isBlank()) throw new IllegalArgumentException("El diagnóstico no puede estar vacío.");
         this.diagnostico = diagnostico;
     }
 
     public void setTratamiento(String tratamiento) {
-        if (tratamiento == null || tratamiento.isBlank()) {
-            throw new IllegalArgumentException("El tratamiento no puede estar vacío.");
-        }
+        if (tratamiento == null || tratamiento.isBlank()) throw new IllegalArgumentException("El tratamiento no puede estar vacío.");
         this.tratamiento = tratamiento;
     }
 
     public void setMedicamentos(String medicamentos) {
-        if (medicamentos == null || medicamentos.isBlank()) {
-            throw new IllegalArgumentException("El medicamento no puede estar vacío.");
-        }
+        if (medicamentos == null || medicamentos.isBlank()) throw new IllegalArgumentException("El medicamento no puede estar vacío.");
         this.medicamentos = medicamentos;
     }
 
     public void setMascota(String mascota) {
-        if (mascota == null || mascota.isBlank()) {
-            throw new IllegalArgumentException("La mascota no puede estar vacía.");
-        }
+        if (mascota == null || mascota.isBlank()) throw new IllegalArgumentException("La mascota no puede estar vacía.");
         this.mascota = mascota;
     }
 
     public void setServicio(String servicio) {
-        if (servicio == null || servicio.isBlank()) {
-            throw new IllegalArgumentException("El servicio no puede estar vacío.");
-        }
+        if (servicio == null || servicio.isBlank()) throw new IllegalArgumentException("El servicio no puede estar vacío.");
         this.servicio = servicio;
     }
 
     public void setComentario(String comentario) {
-        if (comentario == null || comentario.isBlank()) {
-            throw new IllegalArgumentException("El comentario no puede estar vacío.");
-        }
+        if (comentario == null || comentario.isBlank()) throw new IllegalArgumentException("El comentario no puede estar vacío.");
         this.comentario = comentario;
     }
 
-    //Getters
-    public String getMotivo() {
-        return motivo; }
-    public String getDiagnostico() {
-        return diagnostico; }
-    public String getTratamiento() {
-        return tratamiento; }
-    public String getMedicamentos() {
-        return medicamentos; }
-    public String getMascota() {
-        return mascota; }
-    public String getServicio() {
-        return servicio; }
-    public String getComentario() {
-        return comentario; }
-    public String getCodigo() {
-        return codigo; }
+    // === Getters ===
+    public String getMotivo() { return motivo; }
+    public String getDiagnostico() { return diagnostico; }
+    public String getTratamiento() { return tratamiento; }
+    public String getMedicamentos() { return medicamentos; }
+    public String getMascota() { return mascota; }
+    public String getServicio() { return servicio; }
+    public String getComentario() { return comentario; }
+    public String getCodigo() { return codigo; }
 
-    // === Implementación de método abstracto ===
+    // === Método abstracto implementado ===
     @Override
     public void mostrarDetalle() {
         System.out.println("[Consulta] " + getFecha() + " - " + motivo);
@@ -121,8 +99,53 @@ public class Consulta extends EventoClinico {
         System.out.println("Medicamentos: " + medicamentos);
         System.out.println();
     }
-}
 
+    /**
+     * Convierte la consulta en línea CSV para guardar en archivo.
+     */
+    public String toLineaArchivo() {
+        return codigo + "," +
+                getFecha().toString() + "," +
+                safe(motivo) + "," +
+                safe(diagnostico) + "," +
+                safe(tratamiento) + "," +
+                safe(medicamentos) + "," +
+                safe(mascota) + "," +
+                safe(servicio) + "," +
+                safe(comentario);
+    }
+
+    /**
+     * Crea un objeto Consulta a partir de una línea CSV.
+     * Retorna null si la línea es inválida.
+     */
+    public static Consulta desdeLineaArchivo(String linea) {
+        String[] partes = linea.split(",", -1); // -1 para incluir campos vacíos
+        if (partes.length != 9) return null;
+        try {
+            Consulta c = new Consulta(
+                    partes[1], // fecha
+                    partes[2], // motivo
+                    partes[3], // diagnostico
+                    partes[4], // tratamiento
+                    partes[5], // medicamentos
+                    partes[6], // mascota
+                    partes[7], // servicio
+                    partes[8]  // comentario
+            );
+            c.codigo = partes[0]; // Usa el código original leído del archivo
+            return c;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    //Asegura que no haya nulls en la escritura del archivo.
+
+    private static String safe(String s) {
+        return (s == null) ? "" : s;
+    }
+}
 
 /**public void mostrarConsulta() {
     System.out.println("🔢 Código de la consulta: " + codigo);

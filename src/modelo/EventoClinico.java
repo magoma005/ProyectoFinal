@@ -1,8 +1,6 @@
-package modelo; /**
- * Clase abstracta que representa cualquier evento clínico realizado a una mascota.
- * Es la superclase de Consulta, Vacuna y Cita, permitiendo polimorfismo en registros clínicos.
- * Contiene información común como la fecha.
- */
+package modelo;
+ //Clase abstracta que representa cualquier evento clínico realizado a una mascota. Es la superclase de Consulta, Vacuna y Cita, permitiendo polimorfismo en registros clínicos.
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 

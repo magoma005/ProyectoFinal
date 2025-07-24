@@ -1,10 +1,6 @@
-package modelo;
+/*package modelo;
 
-/**
- * Clase que representa una cita agendada para la mascota.
- * Extiende EventoClinico e implementa su método abstracto mostrarDetalle().
- * Incluye el servicio solicitado.
- */
+//Clase que representa una cita agendada para la mascota. Extiende EventoClinico e implementa su método abstracto mostrarDetalle().
 
 public class Cita extends EventoClinico {
     private String hora;
@@ -65,7 +61,7 @@ public class Cita extends EventoClinico {
 
     public String getServicio() {
         return servicio;
-    }*/
+    }
 
     //Implementación de método abstracto
 
@@ -77,4 +73,6 @@ public class Cita extends EventoClinico {
             System.out.println();
         }
 }
+
+*/
 

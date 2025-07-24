@@ -1,163 +1,166 @@
-package vistas;// [IMPORTS]
-import modelo.Mascota;
+package vistas;
+
+import controlador.MascotaControlador;
+import DTO.MascotaDTO;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.List;
 
 public class FormMascota extends JFrame {
 
-    private ArrayList<Mascota> listaPacientes;
+    private JTextField txtNombre, txtEspecie, txtEdad, txtClave;
+    private JTextArea txtListado;
+    private MascotaControlador controlador;
 
-    public FormMascota(ArrayList<Mascota> listaPacientes) {
-        this.listaPacientes = listaPacientes;
+    public FormMascota() {
+        controlador = new MascotaControlador();
 
-        setTitle("Lista de pacientes");
-        setSize(600, 400);
+        setTitle("🐾 Gestión de Mascotas - Clínica Veterinaria");
+        setSize(700, 600);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new BorderLayout());
 
-        // Panel superior con progress bar
-        JPanel panelCarga = new JPanel(new BorderLayout());
-        JProgressBar barraProgreso = new JProgressBar(0, 100);
-        barraProgreso.setStringPainted(true);
-        panelCarga.add(barraProgreso, BorderLayout.NORTH);
-        add(panelCarga, BorderLayout.CENTER);
+        // === Layout principal: BoxLayout vertical ===
+        JPanel panelPrincipal = new JPanel();
+        panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
 
-        Timer timer = new Timer(50, null);
-        timer.addActionListener(e -> {
-            int valor = barraProgreso.getValue();
-            if (valor < 100) {
-                barraProgreso.setValue(valor + 5);
-            } else {
-                timer.stop();
-                // Crear tabla
-                String[] columnas = {"Nombre", "Especie", "Edad"};
-                DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
-                for (Mascota m : listaPacientes) {
-                    Object[] fila = {m.getNombre(), m.getEspecie(), m.getEdad()};
-                    modelo.addRow(fila);
-                }
-                JTable tabla = new JTable(modelo);
-                tabla.getTableHeader().setBackground(new Color(173, 216, 230));
-                tabla.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
+        // === Panel de entrada ===
+        JPanel panelEntrada = new JPanel(new GridBagLayout());
+        panelEntrada.setBorder(BorderFactory.createTitledBorder("Datos de la mascota"));
+        panelEntrada.setBackground(Color.WHITE);
 
-                // Botón eliminar
-                JButton btnEliminar = new JButton("Eliminar paciente");
-                btnEliminar.addActionListener(ev -> eliminarPaciente());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5,5,5,5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0; gbc.gridy = 0;
 
-                // Botón actualizar
-                JButton btnActualizar = new JButton("Actualizar paciente");
-                btnActualizar.addActionListener(ev -> actualizarPaciente());
+        panelEntrada.add(new JLabel("Nombre:"), gbc);
+        gbc.gridx = 1;
+        txtNombre = new JTextField(15);
+        panelEntrada.add(txtNombre, gbc);
 
-                // Panel inferior con botones
-                JPanel panelBotones = new JPanel();
-                panelBotones.add(btnEliminar);
-                panelBotones.add(btnActualizar);
+        gbc.gridx = 0; gbc.gridy++;
+        panelEntrada.add(new JLabel("Especie:"), gbc);
+        gbc.gridx = 1;
+        txtEspecie = new JTextField(15);
+        panelEntrada.add(txtEspecie, gbc);
 
-                JScrollPane scrollTabla = new JScrollPane(tabla);
-                getContentPane().removeAll();
-                add(scrollTabla, BorderLayout.CENTER);
-                add(panelBotones, BorderLayout.SOUTH);
-                revalidate();
-                repaint();
-            }
-        });
-        timer.start();
+        gbc.gridx = 0; gbc.gridy++;
+        panelEntrada.add(new JLabel("Edad:"), gbc);
+        gbc.gridx = 1;
+        txtEdad = new JTextField(15);
+        panelEntrada.add(txtEdad, gbc);
+
+        gbc.gridx = 0; gbc.gridy++;
+        panelEntrada.add(new JLabel("Clave:"), gbc);
+        gbc.gridx = 1;
+        txtClave = new JTextField(15);
+        panelEntrada.add(txtClave, gbc);
+
+        panelPrincipal.add(panelEntrada);
+
+        // === Panel de botones ===
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        panelBotones.setBackground(new Color(240, 248, 255));
+
+        JButton btnGuardar = new JButton("Guardar");
+        btnGuardar.addActionListener(e -> guardar());
+        panelBotones.add(btnGuardar);
+
+        JButton btnActualizar = new JButton("Actualizar");
+        btnActualizar.addActionListener(e -> actualizar());
+        panelBotones.add(btnActualizar);
+
+        JButton btnEliminar = new JButton("Eliminar");
+        btnEliminar.addActionListener(e -> eliminar());
+        panelBotones.add(btnEliminar);
+
+        JButton btnListar = new JButton("Listar");
+        btnListar.addActionListener(e -> listar());
+        panelBotones.add(btnListar);
+
+        panelPrincipal.add(panelBotones);
+
+        // === Área de listado ===
+        txtListado = new JTextArea(10, 50);
+        txtListado.setEditable(false);
+        txtListado.setFont(new Font("Consolas", Font.PLAIN, 13));
+        txtListado.setBackground(new Color(245, 245, 245));
+
+        JScrollPane scroll = new JScrollPane(txtListado);
+        scroll.setBorder(BorderFactory.createTitledBorder("Listado de mascotas"));
+        panelPrincipal.add(scroll);
+
+        add(panelPrincipal);
     }
 
-    private void eliminarPaciente() {
-        JTextField campoNombre = new JTextField();
-        JPasswordField campoClave = new JPasswordField();
-        Object[] mensaje = {
-                "Nombre del paciente a eliminar:", campoNombre,
-                "Clave del paciente:", campoClave
-        };
-        int opcion = JOptionPane.showConfirmDialog(this, mensaje, "Eliminar paciente", JOptionPane.OK_CANCEL_OPTION);
-        if (opcion == JOptionPane.OK_OPTION) {
-            String nombreEliminar = campoNombre.getText().trim();
-            String claveEliminar = new String(campoClave.getPassword()).trim();
-            boolean encontrado = false;
-            for (Mascota m : listaPacientes) {
-                if (m.getNombre().equalsIgnoreCase(nombreEliminar) && m.getClave().equals(claveEliminar)) {
-                    listaPacientes.remove(m);
-                    encontrado = true;
-                    break;
-                }
-            }
-            if (encontrado) {
-                JOptionPane.showMessageDialog(this, "✅ Paciente eliminado exitosamente.");
-                recargarVentana();
-            } else {
-                JOptionPane.showMessageDialog(this, "⚠️ No se encontró un paciente con ese nombre y clave.");
-            }
+    private void guardar() {
+        MascotaDTO dto = capturarDatos();
+        String mensaje = controlador.agregarMascota(dto);
+        mensaje(mensaje);
+        limpiar();
+    }
+
+    private void actualizar() {
+        try {
+            int indice = Integer.parseInt(JOptionPane.showInputDialog(this, "Ingrese el índice de la mascota a actualizar:"));
+            MascotaDTO dto = capturarDatos();
+            String mensaje = controlador.actualizarEntidad(indice, dto);
+            mensaje(mensaje);
+            limpiar();
+        } catch (NumberFormatException ex) {
+            mensaje("❌ Índice inválido.");
         }
     }
 
-    private void actualizarPaciente() {
-        JTextField campoNombre = new JTextField();
-        JPasswordField campoClave = new JPasswordField();
-        Object[] mensaje = {
-                "Nombre del paciente a actualizar:", campoNombre,
-                "Clave del paciente:", campoClave
-        };
-
-        int opcion = JOptionPane.showConfirmDialog(this, mensaje, "Actualizar paciente", JOptionPane.OK_CANCEL_OPTION);
-        if (opcion == JOptionPane.OK_OPTION) {
-            String nombreBuscar = campoNombre.getText().trim();
-            String claveBuscar = new String(campoClave.getPassword()).trim();
-
-            Mascota mascotaEncontrada = null;
-            for (Mascota m : listaPacientes) {
-                if (m.getNombre().equalsIgnoreCase(nombreBuscar) && m.getClave().equals(claveBuscar)) {
-                    mascotaEncontrada = m;
-                    break;
-                }
-            }
-
-            if (mascotaEncontrada != null) {
-                JTextField nuevoNombre = new JTextField(mascotaEncontrada.getNombre());
-                JTextField nuevaEspecie = new JTextField(mascotaEncontrada.getEspecie());
-                JSpinner nuevaEdad = new JSpinner(new SpinnerNumberModel(mascotaEncontrada.getEdad(), 0, 500, 1));
-                JPasswordField nuevaClave = new JPasswordField(mascotaEncontrada.getClave());
-
-                Object[] camposEditar = {
-                        "Nuevo nombre:", nuevoNombre,
-                        "Nueva especie:", nuevaEspecie,
-                        "Nueva edad:", nuevaEdad,
-                        "Nueva clave:", nuevaClave
-                };
-
-                int editar = JOptionPane.showConfirmDialog(this, camposEditar, "Editar datos paciente", JOptionPane.OK_CANCEL_OPTION);
-                if (editar == JOptionPane.OK_OPTION) {
-                    mascotaEncontrada.setNombre(nuevoNombre.getText().trim());
-                    mascotaEncontrada.setEspecie(nuevaEspecie.getText().trim());
-                    mascotaEncontrada.setEdad((int) nuevaEdad.getValue());
-                    mascotaEncontrada.setClave(new String(nuevaClave.getPassword()).trim());
-
-                    JOptionPane.showMessageDialog(this, "✅ Datos actualizados exitosamente.");
-                    recargarVentana();
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "⚠️ No se encontró un paciente con ese nombre y clave.");
-            }
+    private void eliminar() {
+        try {
+            int indice = Integer.parseInt(JOptionPane.showInputDialog(this, "Ingrese el índice de la mascota a eliminar:"));
+            String mensaje = controlador.eliminarEntidad(indice);
+            mensaje(mensaje);
+            limpiar();
+        } catch (NumberFormatException ex) {
+            mensaje("❌ Índice inválido.");
         }
     }
 
-    private void recargarVentana() {
-        dispose();
-        new FormMascota(listaPacientes).setVisible(true);
+    private void listar() {
+        List<MascotaDTO> lista = controlador.obtenerEntidades();
+        txtListado.setText("");
+        int i = 0;
+        for (MascotaDTO m : lista) {
+            txtListado.append((i++) + ". " + m.getNombre() + " | " + m.getEspecie() + " | " + m.getEdad() + "\n");
+        }
     }
 
-    // Método de prueba para lanzar esta ventana individualmente
+    private MascotaDTO capturarDatos() {
+        String nombre = txtNombre.getText().trim();
+        String especie = txtEspecie.getText().trim();
+        String clave = txtClave.getText().trim();
+        int edad;
+
+        try {
+            edad = Integer.parseInt(txtEdad.getText().trim());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Edad debe ser un número válido.");
+        }
+
+        return new MascotaDTO(nombre, especie, edad, clave);
+    }
+
+    private void mensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
+    }
+
+    private void limpiar() {
+        txtNombre.setText("");
+        txtEspecie.setText("");
+        txtEdad.setText("");
+        txtClave.setText("");
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            ArrayList<Mascota> lista = new ArrayList<>();
-            lista.add(new Mascota("Firulais", "Perro", 5, "1234"));
-            lista.add(new Mascota("Michi", "Gato", 3, "abcd"));
-            new FormMascota(lista).setVisible(true);
-        });
+        SwingUtilities.invokeLater(() -> new FormMascota().setVisible(true));
     }
 }

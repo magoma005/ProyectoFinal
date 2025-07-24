@@ -1,6 +1,6 @@
 package DAO;
 
-import modelo.Cita;
+//import modelo.Cita;
 import modelo.Consulta;
 import modelo.Mascota;
 import modelo.Vacuna;
@@ -26,13 +26,13 @@ public class CrudMascotas {
                 case 4 -> eliminarMascota();
                 case 5 -> registrarConsulta();
                 case 6 -> registrarVacuna();
-                case 7 -> agendarCita();
-                case 8 -> verHistorialMascota();
-                case 9 -> System.out.println("👋 Saliendo del sistema...");
+                //case 7 -> agendarCita();
+                case 7 -> verHistorialMascota();
+                case 8 -> System.out.println("👋 Saliendo del sistema...");
                 default -> System.out.println("⚠️ Opción inválida.");
             }
 
-        } while (opcion != 9);
+        } while (opcion != 8);
     }
 
     // MENU
@@ -128,7 +128,7 @@ public class CrudMascotas {
         }
     }
 
-    private void agendarCita() {
+   /* private void agendarCita() {
         System.out.println("--- Agendar Cita ---");
         Mascota m = seleccionarMascota();
         if (m != null) {
@@ -142,7 +142,7 @@ public class CrudMascotas {
 
             System.out.println("✅ Cita agendada exitosamente.");
         }
-    }
+    }*/
 
     private void verHistorialMascota() {
         System.out.println("--- Historial de Mascota ---");

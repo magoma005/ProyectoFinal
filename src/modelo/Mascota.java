@@ -6,7 +6,7 @@ public class Mascota {
     private String nombre;
     private String especie;
     private int edad;
-    private String clave; // Clave para seguridad
+    private String clave;
     private ArrayList<EventoClinico> historial;
 
     public Mascota(String nombre, String especie, int edad, String clave) {
@@ -17,7 +17,16 @@ public class Mascota {
         historial = new ArrayList<>();
     }
 
-    //Setters con su respectiva validación
+    // Constructor adicional ahora sin clave (para métodos como desdeLineaArchivo si se requiere)
+    public Mascota(String nombre, String especie, int edad) {
+        this.nombre = nombre;
+        this.especie = especie;
+        this.edad = edad;
+        this.clave = "";
+        historial = new ArrayList<>();
+    }
+
+    // === Setters con validación ===
 
     public void setNombre(String nombre) {
         if (nombre == null || nombre.isBlank()) {
@@ -65,11 +74,8 @@ public class Mascota {
         return clave;
     }
 
-    /**public void agregarConsulta(Consulta consulta) {
-        historial.agregarConsulta(consulta); // delegamos al historial
-    }**/
+    // === Métodos de historial clínico ===
 
-    // Método para agregar un evento clínico al historial
     public void agregarEvento(EventoClinico evento) {
         if (evento != null) {
             historial.add(evento);
@@ -82,4 +88,26 @@ public class Mascota {
             e.mostrarDetalle(); // se llama al método override de la subclase
         }
     }
+
+    //Devuelve una representación de la mascota en formato CSV para guardar en archivo.
+
+    public String toLineaArchivo() {
+        return nombre + "," + especie + "," + edad + "," + clave;
+    }
+
+    //Crea una instancia de Mascota a partir de una línea CSV.
+
+    public static Mascota desdeLineaArchivo(String linea) {
+        String[] partes = linea.split(",");
+        if (partes.length != 4) return null;
+
+        try {
+            int edad = Integer.parseInt(partes[2].trim());
+            String clave = partes[3].trim();
+            return new Mascota(partes[0].trim(), partes[1].trim(), edad, clave);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
 }
