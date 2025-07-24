@@ -1,6 +1,11 @@
 package modelo;
 
+import excepciones.NombreVacioException;
+import excepciones.EdadInvalidaException;
+import excepciones.EspecieVaciaException;
+import excepciones.ClaveVaciaException;
 import java.util.ArrayList;
+
 
 public class Mascota {
     private String nombre;
@@ -8,6 +13,8 @@ public class Mascota {
     private int edad;
     private String clave;
     private ArrayList<EventoClinico> historial;
+
+    //Constructor principal con todas las validaciones.
 
     public Mascota(String nombre, String especie, int edad, String clave) {
         setNombre(nombre);
@@ -17,46 +24,52 @@ public class Mascota {
         historial = new ArrayList<>();
     }
 
-    // Constructor adicional ahora sin clave (para métodos como desdeLineaArchivo si se requiere)
+    //Constructor adicional sin clave (para métodos como desdeLineaArchivo).
+
     public Mascota(String nombre, String especie, int edad) {
-        this.nombre = nombre;
-        this.especie = especie;
-        this.edad = edad;
-        this.clave = "";
+        setNombre(nombre); // antes: this.nombre = nombre;
+        setEspecie(especie); // antes: this.especie = especie;
+        setEdad(edad); // antes: this.edad = edad;
+        this.clave = ""; // para que se inicializa vacío
         historial = new ArrayList<>();
     }
 
-    // === Setters con validación ===
+    // Setters
 
     public void setNombre(String nombre) {
         if (nombre == null || nombre.isBlank()) {
-            throw new IllegalArgumentException("El nombre de la mascota no puede estar vacío.");
+            throw new NombreVacioException("El nombre de la mascota no puede estar vacío.");
+        }
+        if (nombre.length() < 3) {
+            throw new NombreVacioException("El nombre debe tener al menos 3 caracteres."); //Nueva regla
         }
         this.nombre = nombre;
     }
 
+
     public void setEspecie(String especie) {
         if (especie == null || especie.isBlank()) {
-            throw new IllegalArgumentException("La especie no puede estar vacía.");
+            throw new EspecieVaciaException("La especie no puede estar vacía.");
         }
         this.especie = especie;
     }
 
     public void setEdad(int edad) {
         if (edad < 0) {
-            throw new IllegalArgumentException("La edad no puede ser negativa.");
+            // Antes se usaba IllegalArgumentException
+            throw new EdadInvalidaException("La edad no puede ser negativa.");
         }
         this.edad = edad;
     }
 
     public void setClave(String clave) {
         if (clave == null || clave.isBlank()) {
-            throw new IllegalArgumentException("La clave no puede estar vacía.");
+            throw new ClaveVaciaException("La clave no puede estar vacía.");
         }
         this.clave = clave;
     }
 
-    // === Getters ===
+    // Getters
 
     public String getNombre() {
         return nombre;
@@ -74,7 +87,7 @@ public class Mascota {
         return clave;
     }
 
-    // === Métodos de historial clínico ===
+    // Métodos de historial clínico
 
     public void agregarEvento(EventoClinico evento) {
         if (evento != null) {
@@ -85,18 +98,16 @@ public class Mascota {
     public void mostrarHistorial() {
         System.out.println("📋 Historial clínico de " + nombre + ":");
         for (EventoClinico e : historial) {
-            e.mostrarDetalle(); // se llama al método override de la subclase
+            e.mostrarDetalle(); // Se llama al método override de la subclase
         }
     }
 
     //Devuelve una representación de la mascota en formato CSV para guardar en archivo.
-
     public String toLineaArchivo() {
         return nombre + "," + especie + "," + edad + "," + clave;
     }
 
     //Crea una instancia de Mascota a partir de una línea CSV.
-
     public static Mascota desdeLineaArchivo(String linea) {
         String[] partes = linea.split(",");
         if (partes.length != 4) return null;
@@ -109,5 +120,4 @@ public class Mascota {
             return null;
         }
     }
-
 }
