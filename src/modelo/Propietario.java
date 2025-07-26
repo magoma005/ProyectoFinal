@@ -1,5 +1,7 @@
 package modelo;
 
+import excepciones.TelefonoInvalidoException;
+
 import java.util.ArrayList;
 
 public class Propietario extends Persona {
@@ -18,7 +20,7 @@ public class Propietario extends Persona {
 
     public void setTelefono(String telefono) {
         if (telefono == null || telefono.length() < 7) {
-            throw new IllegalArgumentException("📵 Teléfono inválido, debe tener mínimo 7 caracteres.");
+            throw new TelefonoInvalidoException("📵 Teléfono inválido, debe tener mínimo 7 caracteres.");
         }
         this.telefono = telefono;
     }

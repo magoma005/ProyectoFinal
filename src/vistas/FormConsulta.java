@@ -175,9 +175,6 @@ public class FormConsulta extends JFrame {
                 .map(Mascota::getNombre)
                 .toArray(String[]::new);
     }
-
-
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new FormConsulta().setVisible(true));
     }

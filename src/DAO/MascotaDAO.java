@@ -63,6 +63,16 @@ public class MascotaDAO {
         }
         return false;
     }
+
+    public Mascota buscarPorNombre(String nombre) {
+        for (Mascota m : listar()) {
+            if (m.getNombre().equals(nombre)) {
+                return m;
+            }
+        }
+        return null;
+    }
+
     /*    private void sobrescribirLista(List<Mascota> mascotas) {
         List<String> lineas = new ArrayList<>();
         for (Mascota m : mascotas) {

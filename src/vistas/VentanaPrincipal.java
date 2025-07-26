@@ -77,11 +77,11 @@ public class VentanaPrincipal extends JFrame {
         panelBienvenida.add(Box.createVerticalStrut(10));
         panelBienvenida.add(lblMensaje);
 
-        JButton btnAccesoPacientes = new JButton("Ver pacientes");
+        /*JButton btnAccesoPacientes = new JButton("Ver pacientes");
         btnAccesoPacientes.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnAccesoPacientes.addActionListener(e -> new FormMascota().setVisible(true));
         panelBienvenida.add(Box.createVerticalStrut(20));
-        panelBienvenida.add(btnAccesoPacientes);
+        panelBienvenida.add(btnAccesoPacientes);*/
 
         //Botón "Agendar consulta" comentado
         /*

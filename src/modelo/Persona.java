@@ -9,6 +9,8 @@ import java.io.Serializable;
 public abstract class Persona implements Serializable {
     private String nombre;
     private String identificacion;
+    private Mascota mascotaACargo;
+
 
     public Persona(String nombre, String identificacion) {
         setNombre(nombre);
@@ -35,6 +37,14 @@ public abstract class Persona implements Serializable {
 
     public String getIdentificacion() {
         return identificacion;
+    }
+
+    public Mascota getMascotaACargo() {
+        return mascotaACargo;
+    }
+
+    public void setMascotaACargo(Mascota mascotaACargo) {
+        this.mascotaACargo = mascotaACargo;
     }
 
     //Método abstracto que debe implementar cada subclase para indicar su tipo.
