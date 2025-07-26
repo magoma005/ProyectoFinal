@@ -1,71 +1,57 @@
 package modelo;
 
 import java.util.ArrayList;
-//Se mantuvieron los atributos privados para cumplir con el principio de encapsulamiento
+
 public class Propietario extends Persona {
-    //El extends despues de propietario es porque este usa la info ya puesta en Persona
-    private String documento;
     private String telefono;
     private ArrayList<Mascota> mascotas = new ArrayList<>();
 
-    public Propietario(String nombre, String documento, String telefono) {
-        super(nombre); // usa constructor de Persona
-        setDocumento(documento);
+    public Propietario(String nombre, String identificacion, String telefono) {
+        super(nombre, identificacion); // Usa el constructor de Persona
         setTelefono(telefono);
     }
 
-    public void setDocumento(String documento) {
-        if (documento == null || documento.length() < 5) {
-            throw new IllegalArgumentException("Documento inválido, debe tener mínimo 5 caracteres.");
-        }
-        this.documento = documento;
-    }
-
-    public void setTelefono(String telefono) {
-        if (telefono == null || telefono.length() < 7) {
-            throw new IllegalArgumentException("Teléfono inválido, debe tener mínimo 7 caracteres.");
-        }
-        this.telefono = telefono;
-    }
-
-    public String getDocumento() {
-        return documento;
-    }
-
+    // === Getter y Setter ===
     public String getTelefono() {
         return telefono;
     }
 
+    public void setTelefono(String telefono) {
+        if (telefono == null || telefono.length() < 7) {
+            throw new IllegalArgumentException("📵 Teléfono inválido, debe tener mínimo 7 caracteres.");
+        }
+        this.telefono = telefono;
+    }
+
     // === Métodos de mascotas ===
-    /**
-     * Agrega una mascota a la lista del propietario.
-     */
     public void agregarMascota(Mascota m) {
         if (m != null) {
             mascotas.add(m);
         }
     }
 
+    public ArrayList<Mascota> getMascotas() {
+        return mascotas;
+    }
 
     // === Métodos de visualización ===
-    /**
-     * Muestra los datos básicos del propietario.
-     */
     @Override
     public void mostrarDatos() {
-        super.mostrarDatos(); // muestra nombre
-        System.out.println("🆔 Documento: " + documento);
+        super.mostrarDatos();
         System.out.println("📞 Teléfono: " + telefono);
     }
-    /**
-     * Muestra la información completa del propietario y su historial de mascotas.
-     */
+
     public void mostrarInformacionCompleta() {
         System.out.println("===== FICHA CLÍNICA =====");
-        mostrarDatos(); // usa método polimórfico
+        mostrarDatos(); // polimorfismo
         System.out.println();
         for (Mascota m : mascotas) {
             m.mostrarHistorial();
         }
+    }
+
+    @Override
+    public String getTipo() {
+        return "Propietario";
     }
 }

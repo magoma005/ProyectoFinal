@@ -5,9 +5,10 @@ import excepciones.EdadInvalidaException;
 import excepciones.EspecieVaciaException;
 import excepciones.ClaveVaciaException;
 import java.util.ArrayList;
+import java.io.Serializable;
 
 
-public class Mascota {
+public class Mascota implements Serializable {
     private String nombre;
     private String especie;
     private int edad;

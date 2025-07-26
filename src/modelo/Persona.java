@@ -1,19 +1,19 @@
 package modelo;
 
+import java.io.Serializable;
+
 /**
- * Clase que representa a cualquier persona en el sistema,
- * ya sea propietario, veterinario u otro tipo de usuario futuro.
- * Contiene atributos y métodos comunes.
- *
+ * Clase abstracta que representa a cualquier persona en el sistema,
+ * ya sea propietario, veterinario u otro tipo de usuario.
  */
-public class Persona {
+public abstract class Persona implements Serializable {
     private String nombre;
+    private String identificacion;
 
-    public Persona(String nombre) {
+    public Persona(String nombre, String identificacion) {
         setNombre(nombre);
+        setIdentificacion(identificacion);
     }
-
-    // === Setter con validación ===
 
     public void setNombre(String nombre) {
         if (nombre == null || nombre.isBlank()) {
@@ -22,19 +22,34 @@ public class Persona {
         this.nombre = nombre;
     }
 
-    // === Getter ===
+    public void setIdentificacion(String identificacion) {
+        if (identificacion == null || identificacion.isBlank()) {
+            throw new IllegalArgumentException("La identificación no puede estar vacía.");
+        }
+        this.identificacion = identificacion;
+    }
 
     public String getNombre() {
         return nombre;
     }
 
-    // === Método mostrarDatos ===
+    public String getIdentificacion() {
+        return identificacion;
+    }
 
-    /**
-     * Muestra los datos básicos de la persona en consola.
-     */
+    //Método abstracto que debe implementar cada subclase para indicar su tipo.
+
+    public abstract String getTipo();
+
+    //Muestra los datos básicos de la persona. Las subclases pueden extender este método.
+
     public void mostrarDatos() {
         System.out.println("👤 Nombre: " + nombre);
+        System.out.println("🆔 Identificación: " + identificacion);
+    }
+
+    @Override
+    public String toString() {
+        return getTipo() + " - " + nombre + " (" + identificacion + ")";
     }
 }
-

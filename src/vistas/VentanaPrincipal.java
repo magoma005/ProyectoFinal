@@ -1,7 +1,9 @@
 package vistas;// [IMPORTS]
 import modelo.Consulta;
 import modelo.Mascota;
-
+import modelo.Persona;
+import DAO.PersonaDAO;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -13,6 +15,9 @@ public class VentanaPrincipal extends JFrame {
     private JDesktopPane escritorio;
     private ArrayList<Mascota> listaPacientes = new ArrayList<>();
     private ArrayList<Consulta> listaConsultas = new ArrayList<>();
+    private final PersonaDAO personaDAO = new PersonaDAO();
+    private List<Persona> listaPersonas;
+
 
     public VentanaPrincipal() {
         //CONFIGURACIÓN DE LA VENTANA PRINCIPAL
@@ -21,6 +26,11 @@ public class VentanaPrincipal extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+
+        // CARGA DE DATOS (personas)
+        listaPersonas = personaDAO.cargarPersonas();
+        if (listaPersonas.isEmpty()) {
+        }
 
         //Colores
         Color colorFondo = new Color(240, 248, 255);
@@ -97,8 +107,8 @@ public class VentanaPrincipal extends JFrame {
         JMenuBar barraMenu = new JMenuBar();
         JMenu menuArchivo = new JMenu("Archivo");
         menuArchivo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        JMenuItem itemNuevoRegistro = new JMenuItem("Nuevo registro");
-        itemNuevoRegistro.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        /*JMenuItem itemNuevoRegistro = new JMenuItem("Nuevo registro");
+        itemNuevoRegistro.setFont(new Font("Segoe UI", Font.PLAIN, 13));*/
         JMenuItem itemAgendarConsulta = new JMenuItem("Agendar Consulta");
         itemAgendarConsulta.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         itemAgendarConsulta.addActionListener(e -> agendarConsulta());
@@ -108,18 +118,22 @@ public class VentanaPrincipal extends JFrame {
 
         // Acción salir
         itemSalir.addActionListener(e -> {
+            personaDAO.guardarPersonas(listaPersonas);
             JOptionPane.showMessageDialog(this, "👋 Gracias por usar PetControl. ¡Hasta pronto!");
             System.exit(0);
         });
 
         // Acción nuevo registro
-        itemNuevoRegistro.addActionListener(e -> crearFormularioIngreso());
+        /*itemNuevoRegistro.addActionListener(e -> crearFormularioIngreso());
         menuArchivo.add(itemNuevoRegistro);
         menuArchivo.addSeparator();
-        menuArchivo.add(itemSalir);
+        menuArchivo.add(itemSalir);*/
 
         JMenu menuVista = new JMenu("Vista");
         menuVista.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        JMenuItem itemPersonas = new JMenuItem("Personas");
+        itemPersonas.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        itemPersonas.addActionListener(e -> new FormPersona().setVisible(true));
         JMenuItem itemPacientes = new JMenuItem("Pacientes");
         itemPacientes.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         JMenuItem itemConsultas = new JMenuItem("Consultas");
@@ -133,6 +147,7 @@ public class VentanaPrincipal extends JFrame {
         itemConsultas.addActionListener(e -> new FormConsulta().setVisible(true));
 
         menuVista.add(itemPacientes);
+        menuVista.add(itemPersonas);
         menuVista.add(itemConsultas);
         barraMenu.add(menuArchivo);
         barraMenu.add(menuVista);
