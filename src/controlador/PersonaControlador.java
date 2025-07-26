@@ -41,5 +41,26 @@ public class PersonaControlador {
         return nombre != null && !nombre.isEmpty() &&
                 documento != null && documento.matches("\\d+");
     }
+
+    // Actualiza una persona existente por su ID
+    public boolean actualizarPersona(String id, Persona nuevaPersona) {
+        for (int i = 0; i < personas.size(); i++) {
+            if (personas.get(i).getIdentificacion().equals(id)) {
+                personas.set(i, nuevaPersona);
+                dao.guardarPersonas(personas);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Persona buscarPorIdentificacion(String id) {
+        for (Persona p : personas) {
+            if (p.getIdentificacion().equals(id)) {
+                return p;
+            }
+        }
+        return null;
+    }
 }
 

@@ -7,10 +7,9 @@ import java.util.List;
 public class ConsultaControlador {
     private ConsultaDAO dao = new ConsultaDAO();
 
-    public String agregarConsulta(ConsultaDTO dto) {
-        if (dto.getMotivo() == null || dto.getMotivo().isBlank()) return "❌ El motivo es obligatorio.";
+    public String agendarConsulta(ConsultaDTO dto) {
+        if (dto.getServicio() == null || dto.getServicio().isBlank()) return "❌ El servicio es obligatorio.";
         if (dto.getDiagnostico() == null || dto.getDiagnostico().isBlank()) return "❌ El diagnóstico es obligatorio.";
-        if (dto.getTratamiento() == null || dto.getTratamiento().isBlank()) return "❌ El tratamiento es obligatorio.";
         dao.guardar(dto);
         return "✅ Consulta registrada correctamente.";
     }

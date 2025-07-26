@@ -21,6 +21,13 @@ public class PersonaDAO {
         }
     }
 
+    public PersonaDAO() {
+        File f = new File(archivo);
+        if (!f.exists()) {
+            guardarPersonas(new ArrayList<>());
+        }
+    }
+
     //Carga la lista de personas desde el archivo, o retorna una lista vacía.
 
     public List<Persona> cargarPersonas() {

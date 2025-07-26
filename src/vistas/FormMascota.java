@@ -2,6 +2,7 @@ package vistas;
 
 import controlador.MascotaControlador;
 import DTO.MascotaDTO;
+import excepciones.DatoInvalidoException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +10,8 @@ import java.util.List;
 
 public class FormMascota extends JFrame {
 
-    private JTextField txtNombre, txtEspecie, txtEdad, txtClave;
+    private JTextField txtNombre, txtEspecie, txtEdad;
+    private JPasswordField txtClave;
     private JTextArea txtListado;
     private MascotaControlador controlador;
 
@@ -18,7 +20,7 @@ public class FormMascota extends JFrame {
 
         setTitle("🐾 Gestión de Mascotas - Clínica Veterinaria");
         setSize(700, 600);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
         // === Layout principal: BoxLayout vertical ===
@@ -55,8 +57,9 @@ public class FormMascota extends JFrame {
         gbc.gridx = 0; gbc.gridy++;
         panelEntrada.add(new JLabel("Clave:"), gbc);
         gbc.gridx = 1;
-        txtClave = new JTextField(15);
+        txtClave = new JPasswordField(15);
         panelEntrada.add(txtClave, gbc);
+
 
         panelPrincipal.add(panelEntrada);
 
@@ -96,10 +99,16 @@ public class FormMascota extends JFrame {
     }
 
     private void guardar() {
-        MascotaDTO dto = capturarDatos();
-        String mensaje = controlador.agregarMascota(dto);
-        mensaje(mensaje);
-        limpiar();
+        try {
+            MascotaDTO dto = capturarDatos();
+            String mensaje = controlador.agregarMascota(dto);
+            mensaje(mensaje);
+            limpiar();
+        } catch (DatoInvalidoException ex) {
+            mostrarError(ex.getMessage());
+        } catch (Exception ex) {
+            mostrarError("Error al guardar: " + ex.getMessage());
+        }
     }
 
     private void actualizar() {
@@ -110,7 +119,9 @@ public class FormMascota extends JFrame {
             mensaje(mensaje);
             limpiar();
         } catch (NumberFormatException ex) {
-            mensaje("❌ Índice inválido.");
+            mostrarError("❌ Índice inválido.");
+        } catch (DatoInvalidoException ex) {
+            mostrarError(ex.getMessage());
         }
     }
 
@@ -121,7 +132,7 @@ public class FormMascota extends JFrame {
             mensaje(mensaje);
             limpiar();
         } catch (NumberFormatException ex) {
-            mensaje("❌ Índice inválido.");
+            mostrarError("❌ Índice inválido.");
         }
     }
 
@@ -134,16 +145,25 @@ public class FormMascota extends JFrame {
         }
     }
 
-    private MascotaDTO capturarDatos() {
+    private MascotaDTO capturarDatos() throws DatoInvalidoException {
         String nombre = txtNombre.getText().trim();
         String especie = txtEspecie.getText().trim();
+        String edadStr = txtEdad.getText().trim();
         String clave = txtClave.getText().trim();
-        int edad;
 
+        if (nombre.isEmpty() || especie.isEmpty() || edadStr.isEmpty()) {
+            throw new DatoInvalidoException("Todos los campos son obligatorios");
+        }
+
+        int edad;
         try {
-            edad = Integer.parseInt(txtEdad.getText().trim());
+            edad = Integer.parseInt(edadStr);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Edad debe ser un número válido.");
+            throw new DatoInvalidoException("La edad debe ser un número válido");
+        }
+
+        if (edad < 0) {
+            throw new DatoInvalidoException("La edad no puede ser negativa");
         }
 
         return new MascotaDTO(nombre, especie, edad, clave);
@@ -151,6 +171,10 @@ public class FormMascota extends JFrame {
 
     private void mensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
+    }
+
+    private void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     private void limpiar() {

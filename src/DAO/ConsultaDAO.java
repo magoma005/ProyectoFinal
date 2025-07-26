@@ -14,7 +14,7 @@ public class ConsultaDAO {
     private final ArchivoManager archivo;        // Persistencia en archivo plano
 
     public ConsultaDAO() {
-        archivo = new ArchivoManager("data/consultas.txt");
+        archivo = new ArchivoManager("data/consultas.dat");
         consultas = new ArrayList<>();
         cargarDesdeArchivo();
     }
@@ -54,15 +54,15 @@ public class ConsultaDAO {
     private String toLineaArchivo(ConsultaDTO dto) {
         return dto.getFecha() + "," +
                 dto.getMascota() + "," +
-                dto.getMotivo() + "," +
-                dto.getDiagnostico() + "," +
-                dto.getTratamiento();
+                dto.getServicio() + "," +
+                dto.getDiagnostico();
     }
 
     private ConsultaDTO desdeLineaArchivo(String linea) {
         String[] partes = linea.split(",");
-        if (partes.length != 5) return null;
-        return new ConsultaDTO(partes[0], partes[1], partes[2], partes[3], partes[4]);
+        if (partes.length != 4) return null;
+
+        return new ConsultaDTO(partes[0], partes[1], partes[2], partes[3]);
     }
 
     private void sobrescribirArchivo() {

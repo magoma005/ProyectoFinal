@@ -1,8 +1,10 @@
-package vistas;// [IMPORTS]
+package vistas;
+
 import modelo.Consulta;
 import modelo.Mascota;
 import modelo.Persona;
 import DAO.PersonaDAO;
+
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -18,62 +20,57 @@ public class VentanaPrincipal extends JFrame {
     private final PersonaDAO personaDAO = new PersonaDAO();
     private List<Persona> listaPersonas;
 
-
     public VentanaPrincipal() {
-        //CONFIGURACIÓN DE LA VENTANA PRINCIPAL
+        // CONFIGURACIÓN DE LA VENTANA
         setTitle("PetControl - Sistema de Gestión Clínica Veterinaria");
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // CARGA DE DATOS (personas)
+        // Cargar personas
         listaPersonas = personaDAO.cargarPersonas();
-        if (listaPersonas.isEmpty()) {
-        }
 
-        //Colores
+        // Fondo
         Color colorFondo = new Color(240, 248, 255);
         getContentPane().setBackground(colorFondo);
 
-        //PANEL IZQUIERDO: JTree de servicios
+        // Árbol de servicios (panel izquierdo)
         DefaultMutableTreeNode raiz = new DefaultMutableTreeNode("Servicios");
         raiz.add(new DefaultMutableTreeNode("Medicina general"));
         raiz.add(new DefaultMutableTreeNode("Cirugía"));
         raiz.add(new DefaultMutableTreeNode("Vacunación"));
         raiz.add(new DefaultMutableTreeNode("Peluquería"));
         raiz.add(new DefaultMutableTreeNode("Urgencias"));
-
         JTree arbolServicios = new JTree(raiz);
         JScrollPane scrollArbol = new JScrollPane(arbolServicios);
         add(scrollArbol, BorderLayout.WEST);
 
-        //PANEL CENTRAL CON ESCRITORIO
+        // Escritorio (panel central)
         escritorio = new JDesktopPane();
         escritorio.setBackground(Color.WHITE);
         add(escritorio, BorderLayout.CENTER);
 
-        // PANEL DE BIENVENIDA
+        // Panel de bienvenida
         JPanel panelBienvenida = new JPanel();
         panelBienvenida.setBackground(Color.WHITE);
         panelBienvenida.setLayout(new BoxLayout(panelBienvenida, BoxLayout.Y_AXIS));
 
-        // Logo centrado
+        // Logo
         ImageIcon iconoLogo = new ImageIcon(getClass().getResource("/imagenes/logo2.jpg"));
         Image imagenLogo = iconoLogo.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         JLabel lblLogo = new JLabel(new ImageIcon(imagenLogo));
         lblLogo.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelBienvenida.add(Box.createVerticalStrut(20)); // Espacio superior
+        panelBienvenida.add(Box.createVerticalStrut(20));
         panelBienvenida.add(lblLogo);
 
-        // Texto de bienvenida
+        // Bienvenida
         JLabel lblBienvenida = new JLabel("Bienvenido a PetControl");
         lblBienvenida.setFont(new Font("Segoe UI", Font.BOLD, 20));
         lblBienvenida.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelBienvenida.add(Box.createVerticalStrut(20));
         panelBienvenida.add(lblBienvenida);
 
-        // Mensaje guía
         JLabel lblMensaje = new JLabel("Selecciona una opción en el menú superior para comenzar.");
         lblMensaje.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         lblMensaje.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -86,75 +83,85 @@ public class VentanaPrincipal extends JFrame {
         panelBienvenida.add(Box.createVerticalStrut(20));
         panelBienvenida.add(btnAccesoPacientes);
 
+        //Botón "Agendar consulta" comentado
+        /*
         JButton btnAccesoConsulta = new JButton("Agendar consulta");
         btnAccesoConsulta.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnAccesoConsulta.addActionListener(e -> agendarConsulta());
         panelBienvenida.add(Box.createVerticalStrut(10));
         panelBienvenida.add(btnAccesoConsulta);
-        panelBienvenida.add(Box.createVerticalGlue()); // Empuja contenido hacia arriba
+        */
 
-        //Panel de bienvenida al escritorio
+        panelBienvenida.add(Box.createVerticalGlue());
         panelBienvenida.setBounds(200, 50, 400, 400);
         escritorio.add(panelBienvenida);
+        panelBienvenida.revalidate();
+        panelBienvenida.repaint();
 
-
-        //PIE DE PÁGINA CON INFORMACIÓN
+        // Pie de página
         JLabel piePagina = new JLabel("© 2025 PetControl. Todos los derechos reservados.", SwingConstants.CENTER);
         piePagina.setFont(new Font("Segoe UI", Font.ITALIC, 12));
         add(piePagina, BorderLayout.SOUTH);
 
-        //BARRA DE MENÚ
+        // BARRA DE MENÚ con botones centrados
         JMenuBar barraMenu = new JMenuBar();
+
+// Espacio a la izquierda para centrar los elementos
+        barraMenu.add(Box.createHorizontalGlue());
+
+// Menú Archivo
         JMenu menuArchivo = new JMenu("Archivo");
         menuArchivo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        /*JMenuItem itemNuevoRegistro = new JMenuItem("Nuevo registro");
-        itemNuevoRegistro.setFont(new Font("Segoe UI", Font.PLAIN, 13));*/
-        JMenuItem itemAgendarConsulta = new JMenuItem("Agendar Consulta");
-        itemAgendarConsulta.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        itemAgendarConsulta.addActionListener(e -> agendarConsulta());
-        menuArchivo.add(itemAgendarConsulta);
         JMenuItem itemSalir = new JMenuItem("Salir");
         itemSalir.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-
-        // Acción salir
         itemSalir.addActionListener(e -> {
+            // Guarda los datos antes de salir
             personaDAO.guardarPersonas(listaPersonas);
             JOptionPane.showMessageDialog(this, "👋 Gracias por usar PetControl. ¡Hasta pronto!");
             System.exit(0);
         });
+        menuArchivo.add(itemSalir);
 
-        // Acción nuevo registro
-        /*itemNuevoRegistro.addActionListener(e -> crearFormularioIngreso());
-        menuArchivo.add(itemNuevoRegistro);
-        menuArchivo.addSeparator();
-        menuArchivo.add(itemSalir);*/
-
-        JMenu menuVista = new JMenu("Vista");
-        menuVista.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        JMenuItem itemPersonas = new JMenuItem("Personas");
-        itemPersonas.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        itemPersonas.addActionListener(e -> new FormPersona().setVisible(true));
-        JMenuItem itemPacientes = new JMenuItem("Pacientes");
+// Menú Pacientes
+        JMenu menuPacientes = new JMenu("Pacientes");
+        menuPacientes.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        JMenuItem itemPacientes = new JMenuItem("Ver Pacientes");
         itemPacientes.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        JMenuItem itemConsultas = new JMenuItem("Consultas");
+        itemPacientes.addActionListener(e -> new FormMascota().setVisible(true));
+        menuPacientes.add(itemPacientes);
+
+// Menú Consultas
+        JMenu menuConsultas = new JMenu("Consultas");
+        menuConsultas.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        JMenuItem itemConsultas = new JMenuItem("Ver Consultas");
         itemConsultas.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         itemConsultas.addActionListener(e -> new FormConsulta().setVisible(true));
+        menuConsultas.add(itemConsultas);
 
-         // Acción pacientes
-        itemPacientes.addActionListener(e -> new FormMascota().setVisible(true));
+// MENÚ Registro
+        JMenu menuRegistro = new JMenu("Registro");
+        menuRegistro.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        JMenuItem itemPersonas = new JMenuItem("Gestionar personas");
+        itemPersonas.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        itemPersonas.addActionListener(e -> {
+            // Abre la ventana de gestión de personas
+            FormPersona ventanaPersonas = new FormPersona();
+            ventanaPersonas.setVisible(true);
+        });
+        menuRegistro.add(itemPersonas);
 
-        // Acción consultas
-        itemConsultas.addActionListener(e -> new FormConsulta().setVisible(true));
-
-        menuVista.add(itemPacientes);
-        menuVista.add(itemPersonas);
-        menuVista.add(itemConsultas);
+        // Añadir los menús a la barra
         barraMenu.add(menuArchivo);
-        barraMenu.add(menuVista);
+        barraMenu.add(menuPacientes);
+        barraMenu.add(menuConsultas);
+        barraMenu.add(menuRegistro);
+
+        // Espacio a la derecha para mantener los botones centrados
+        barraMenu.add(Box.createHorizontalGlue());
+
+       // Asignar barra al JFrame
         setJMenuBar(barraMenu);
-
         setVisible(true);
-
     }
 
     // Creacion de un Splash Screen con su logo y carga
@@ -293,7 +300,7 @@ public class VentanaPrincipal extends JFrame {
 }
 
     // FORMULARIO PARA AGENDAR CONSULTA
-    private void agendarConsulta() {
+   /* private void agendarConsulta() {
         JInternalFrame formConsulta = new JInternalFrame("Agendar Consulta", true, true, true, true);
         formConsulta.setSize(450, 350);
         formConsulta.setLayout(new GridBagLayout());
@@ -387,7 +394,7 @@ public class VentanaPrincipal extends JFrame {
 
         escritorio.add(formConsulta);
         formConsulta.setVisible(true);
-    }
+    }*/
 
     public static void main(String[] args) {
         // Mostrar splash antes de iniciar app
