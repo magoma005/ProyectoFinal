@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ArchivoUtil {
 
-    // ✅ Escribe una línea en un archivo (modo append)
+    // Escribe una línea en un archivo (modo append)
     public static void escribirLinea(String ruta, String linea, boolean append) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(ruta, append))) {
             bw.write(linea);
@@ -16,7 +16,7 @@ public class ArchivoUtil {
         }
     }
 
-    // ✅ Lee todas las líneas de un archivo
+    // Lee todas las líneas de un archivo
     public static List<String> leerArchivo(String ruta) {
         List<String> lineas = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
@@ -30,7 +30,7 @@ public class ArchivoUtil {
         return lineas;
     }
 
-    // ✅ Sobrescribe archivo completo
+    // Sobrescribe archivo completo
     public static void sobrescribirArchivo(String ruta, List<?> objetos) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(ruta))) {
             for (Object o : objetos) {
@@ -42,7 +42,7 @@ public class ArchivoUtil {
         }
     }
 
-    // ✅ Crea archivo si no existe
+    // Crea archivo si no existe
     public static void crearArchivoSiNoExiste(String ruta) {
         File archivo = new File(ruta);
         try {
@@ -55,12 +55,12 @@ public class ArchivoUtil {
         }
     }
 
-    // ✅ Elimina un archivo
+    // Elimina un archivo
     public static boolean eliminarArchivo(String ruta) {
         return new File(ruta).delete();
     }
 
-    // ✅ Renombrar archivo
+    // Renombrar archivo
     public static boolean renombrarArchivo(String rutaVieja, String nuevoNombre) {
         File archivoViejo = new File(rutaVieja);
         File archivoNuevo = new File(archivoViejo.getParent(), nuevoNombre);

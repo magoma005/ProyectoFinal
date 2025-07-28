@@ -7,48 +7,55 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MascotaControlador {
-    private MascotaDAO dao = new MascotaDAO();
+    private MascotaDAO dao = new MascotaDAO(); // DAO encargado de manejar la persistencia de las mascotas
 
-    // Método para agregar mascota (agrega validaciones)
+    // ===============================
+    // Método para agregar una mascota. Realiza validaciones y guarda la nueva mascota en el archivo
+    // ===============================
     public String agregarMascota(MascotaDTO dto) {
         try {
-            validar(dto);
+            validar(dto); // Validación de datos obligatorios
             Mascota m = new Mascota(dto.getNombre(), dto.getEspecie(), dto.getEdad(), dto.getClave());
-            dao.guardar(m);
+            dao.guardar(m); // Se guarda en archivo .dat
             return "✅ Mascota guardada correctamente.";
         } catch (Exception e) {
             return "❌ Error: " + e.getMessage();
         }
     }
 
-    // Método para obtener todas las mascotas
+    // ============================================
+    // Método que retorna la lista de mascotas sin mostrar claves reales. Se usa para mostrar datos de forma segura (con clave oculta)
+    // ============================================
     public List<MascotaDTO> obtenerEntidades() {
-        List<Mascota> mascotas = dao.listar();
+        List<Mascota> mascotas = dao.listar(); // Obtiene lista original de objetos Mascota
         List<MascotaDTO> listaDTO = new ArrayList<>();
         for (Mascota m : mascotas) {
+            // Se enmascara la clave con "***"
             listaDTO.add(new MascotaDTO(m.getNombre(), m.getEspecie(), m.getEdad(), "***"));
         }
         return listaDTO;
     }
 
-    // Método privado que devuelve las mascotas con claves REALES (para uso interno)
+    // =====================================================
+    // Método que retorna la lista de mascotas CON clave real. Se usa internamente para edición, búsqueda o validaciones
+    // =====================================================
     public List<MascotaDTO> obtenerEntidadesConClaveReal() {
         List<Mascota> mascotas = dao.listar();
         List<MascotaDTO> listaDTO = new ArrayList<>();
         for (Mascota m : mascotas) {
-            // Aquí sí se usa la clave real
             listaDTO.add(new MascotaDTO(m.getNombre(), m.getEspecie(), m.getEdad(), m.getClave()));
         }
         return listaDTO;
     }
 
-
-    // Método para actualizar mascota por índice
+    // ================================================
+    // Método para actualizar una mascota según su índice. Realiza validaciones y reemplaza el objeto original
+    // ================================================
     public String actualizarEntidad(int indice, MascotaDTO dto) {
         try {
             validar(dto);
             Mascota nueva = new Mascota(dto.getNombre(), dto.getEspecie(), dto.getEdad(), dto.getClave());
-            boolean actualizado = dao.actualizarPorIndice(indice, nueva);
+            boolean actualizado = dao.actualizarPorIndice(indice, nueva); // Reemplaza la mascota en esa posición
             if (actualizado) {
                 return "✅ Mascota actualizada correctamente.";
             } else {
@@ -59,7 +66,9 @@ public class MascotaControlador {
         }
     }
 
-    // Método para eliminar mascota por índice
+    // =============================================
+    // Método para eliminar una mascota por su índice
+    // =============================================
     public String eliminarEntidad(int indice) {
         boolean eliminado = dao.eliminarPorIndice(indice);
         if (eliminado) {
@@ -69,7 +78,9 @@ public class MascotaControlador {
         }
     }
 
-    // Validaciones de campos
+    // ============================
+    // Método privado de validación. Lanza excepciones si algún campo no cumple con lo requerido
+    // ============================
     private void validar(MascotaDTO dto) {
         if (dto.getNombre() == null || dto.getNombre().isBlank()) {
             throw new IllegalArgumentException("El nombre no puede estar vacío.");
@@ -85,6 +96,9 @@ public class MascotaControlador {
         }
     }
 
+    // ======================================================
+    // Método para buscar una mascota por su nombre y especie. Retorna el DTO encontrado o null si no existe
+    // ======================================================
     public MascotaDTO buscarPorNombreYEspecie(String nombre, String especie) {
         for (MascotaDTO m : obtenerEntidades()) {
             if (m.getNombre().equals(nombre) && m.getEspecie().equals(especie)) {
@@ -94,6 +108,9 @@ public class MascotaControlador {
         return null;
     }
 
+    // ========================================================
+    // Método para actualizar una mascota a partir de su clave. Se recorre la lista hasta encontrar la mascota con esa clave
+    // ========================================================
     public String actualizarPorClave(String claveOriginal, MascotaDTO nueva) {
         List<Mascota> lista = dao.listar();
         for (int i = 0; i < lista.size(); i++) {
@@ -111,9 +128,9 @@ public class MascotaControlador {
         return "❌ No se encontró la mascota para actualizar.";
     }
 
-
-
-    // Método para guardar la lista completa de mascotas (para persistencia total)
+    // =================================================
+    // Método que guarda una lista completa de mascotas. Se usa cuando se quiere sobrescribir todo el archivo
+    // =================================================
     public void guardarEntidades(List<MascotaDTO> lista) {
         List<Mascota> entidades = new ArrayList<>();
         for (MascotaDTO dto : lista) {
@@ -123,3 +140,4 @@ public class MascotaControlador {
     }
 
 }
+
