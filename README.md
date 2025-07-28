@@ -1,92 +1,110 @@
-🐾 PetControl
-PetControl es un sistema de gestión para clínicas veterinarias que permite:
+# 🐾 Sistema de Gestión Veterinaria
 
-Registrar pacientes (mascotas) con su información.
+Proyecto desarrollado en **Java con Swing**, que permite gestionar información sobre mascotas, propietarios, veterinarios y consultas médicas. Utiliza patrones de diseño, persistencia binaria y una arquitectura modular para garantizar escalabilidad y mantenibilidad.
 
-Agendar consultas para diferentes servicios veterinarios.
+---
 
-Visualizar la lista de pacientes y sus datos.
+## 🛠️ Funcionalidades principales
 
-Consultar las citas agendadas.
+✅ Registrar, listar, actualizar y eliminar **mascotas**  
+✅ Registrar y consultar **consultas veterinarias**  
+✅ Gestión de **personas** (propietarios y veterinarios)  
+✅ Persistencia de datos en archivos binarios (`.dat`)  
+✅ Validación de datos mediante **excepciones personalizadas**  
+✅ Interfaz gráfica intuitiva con **Java Swing**  
+✅ Estructura orientada a objetos con **herencia, abstracción y polimorfismo**
 
-✨ Características principales
-✅ Registro de pacientes con validaciones robustas (nombre, especie, edad, clave).
-✅ Excepciones personalizadas para entradas inválidas.
-✅ Agenda de consultas con servicio y comentario adicional.
-✅ Interfaz gráfica amigable con Java Swing.
-✅ Panel de bienvenida con logo y mensajes de guía.
-✅ Menú de navegación intuitivo para registrar y consultar datos.
-✅ Código organizado por paquetes (model, exceptions, app).
-✅ Manejo de errores como NullPointerException y ArithmeticException sin detener el programa.
+---
 
-🖥️ Requisitos
-Java JDK 17 o superior.
+## 📁 Estructura del proyecto
 
-IDE recomendado: IntelliJ IDEA o NetBeans.
+📦 proyecto-raiz
+┣ 📁 controller → Lógica entre vista y modelo
+┃ ┗ 📄 MascotaControlador.java
+┃ ┗ 📄 ConsultaControlador.java
+┃ ┗ 📄 PersonaControlador.java
+┃
+┣ 📁 model → Entidades del dominio
+┃ ┗ 📄 Persona.java (abstracta)
+┃ ┗ 📄 Propietario.java
+┃ ┗ 📄 Veterinario.java
+┃ ┗ 📄 Mascota.java
+┃ ┗ 📄 EventoClinico.java (abstracta)
+┃ ┗ 📄 Consulta.java
+┃
+┣ 📁 dto → Transferencia de datos
+┃ ┗ 📄 MascotaDTO.java
+┃ ┗ 📄 ConsultaDTO.java
+┃ ┗ 📄 VeterinarioDTO.java
+┃ ┗ 📄 VacunaDTO.java
+┃
+┣ 📁 dao → Acceso a datos
+┃ ┗ 📄 MascotaDAO.java
+┃ ┗ 📄 PersonaDAO.java
+┃ ┗ 📄 ConsultaDAO.java
+┃
+┣ 📁 persistence → Manejo de archivos
+┃ ┗ 📄 GestorPersistencia.java (Singleton)
+┃ ┗ 📄 ArchivoManager.java
+┃ ┗ 📄 ArchivoUtil.java
+┃
+┣ 📁 exception → Validaciones y errores personalizados
+┃ ┗ 📄 DatoInvalidoException.java
+┃ ┗ 📄 ClaveVaciaException.java
+┃ ┗ 📄 EspecieVaciaException.java
+┃ ┗ 📄 EdadInvalidaException.java
+┃ ┗ 📄 NombreVacioException.java
+┃
+┣ 📁 utils → Herramientas auxiliares
+┃ ┗ 📄 IDGenerator.java
+┃
+┣ 📁 view → Interfaces gráficas
+┃ ┗ 📄 FormMascota.java
+┃ ┗ 📄 FormPersona.java
+┃ ┗ 📄 FormConsulta.java
+┃
+┣ 📁 data → Archivos de datos binarios
+┃ ┗ 📄 mascotas.dat
+┃ ┗ 📄 personas.dat
+┃ ┗ 📄 consultas.dat
+┃
+┗ 📄 Main.java → Punto de entrada de la aplicación
 
-⚙️ Instalación y ejecución
-Clona este repositorio:
-
-
-git clone https://github.com/tuusuario/PetControl.git
-cd PetControl
-Abre el proyecto en tu IDE favorito.
-
-Asegúrate de tener configurado el JDK 17.
-
-Ejecuta la clase Main o VentanaPrincipal para iniciar el sistema.
-
-🚀 Uso
-Desde el menú Archivo, puedes:
-
-Registrar un nuevo paciente.
-
-Agendar una consulta para una mascota existente.
-
-Desde el menú Vista, puedes:
-
-Ver la lista de pacientes.
-
-Ver la lista de consultas agendadas.
-
-Explora los servicios en el panel izquierdo (JTree).
-
-🔒 Validaciones y excepciones implementadas
-✔️ NombreVacioException: nombre de mascota no puede estar vacío.
-✔️ EdadInvalidaException: edad de mascota no puede ser negativa.
-✔️ Nombre de mascota con al menos 3 caracteres.
-✔️ Manejo de NullPointerException y ArithmeticException sin interrupciones.
-✔️ Mensajes claros al usuario cuando ocurre un error.
-
-📁 Estructura de carpetas
-css
+yaml
 Copiar
 Editar
-src/
-├── app/
-│    └── MainTallerExcepciones.java
-├── exceptions/
-│    ├── EdadInvalidaException.java
-│    └── NombreVacioException.java
-├── imagenes/
-│    └── logo.jpg
-├── model/
-│    ├── Mascota.java
-│    └── EventoClinico.java
-├── vistas/
-│    ├── FormMascota.java
-│    └── FormConsulta.java
-└── VentanaPrincipal.java
-👨‍💻 Autor
-Miguel Angel Guarin
 
-❤️ Créditos
-Proyecto desarrollado como parte de prácticas de programación orientada a objetos y desarrollo de interfaces gráficas en Java.
+---
 
-📌 Notas
-Persistencia: actualmente usa archivos locales, ideal para prácticas.
+## 🧠 Patrones y principios aplicados
 
-El logo está en src/imagenes/logo.jpg y puedes reemplazarlo por el de tu clínica.
+- **DAO (Data Access Object)** para encapsular la lógica de acceso a datos
+- **DTO (Data Transfer Object)** para comunicar la lógica con la interfaz
+- **Singleton** en la clase `GestorPersistencia` para garantizar acceso único al almacenamiento
+- **Abstracción y polimorfismo** con clases como `Persona` y `EventoClinico`
+- **Validación robusta** con excepciones personalizadas
 
-Sistema diseñado para extensiones futuras como conexión a MySQL o exportación de datos.
+---
 
+## ▶️ Cómo ejecutar
+
+1. Abre el proyecto en **IntelliJ IDEA** o **NetBeans**
+2. Asegúrate de tener Java 8 o superior
+3. Ejecuta la clase `Main.java`
+4. La interfaz gráfica se abrirá automáticamente
+
+> La carpeta `data/` se crea automáticamente si no existe. Los archivos `.dat` se usan para guardar los datos de forma persistente.
+
+---
+
+## 📌 Notas adicionales
+
+- Proyecto educativo para reforzar principios de POO, estructura de capas y manejo de archivos.
+- Puede extenderse fácilmente para incluir funcionalidades como vacunación, historial médico o reportes PDF.
+
+---
+
+## 👨‍💻 Autor
+
+- Miguel Ángel Guarín
+- Proyecto académico – 2025
