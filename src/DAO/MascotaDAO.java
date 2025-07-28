@@ -73,6 +73,13 @@ public class MascotaDAO {
         return null;
     }
 
+    public void guardarLista(List<Mascota> lista) {
+        gestor.guardarLista(RUTA, lista);
+    }
+
+
+
+
     /*    private void sobrescribirLista(List<Mascota> mascotas) {
         List<String> lineas = new ArrayList<>();
         for (Mascota m : mascotas) {

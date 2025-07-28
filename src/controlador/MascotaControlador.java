@@ -31,6 +31,18 @@ public class MascotaControlador {
         return listaDTO;
     }
 
+    // Método privado que devuelve las mascotas con claves REALES (para uso interno)
+    public List<MascotaDTO> obtenerEntidadesConClaveReal() {
+        List<Mascota> mascotas = dao.listar();
+        List<MascotaDTO> listaDTO = new ArrayList<>();
+        for (Mascota m : mascotas) {
+            // Aquí sí se usa la clave real
+            listaDTO.add(new MascotaDTO(m.getNombre(), m.getEspecie(), m.getEdad(), m.getClave()));
+        }
+        return listaDTO;
+    }
+
+
     // Método para actualizar mascota por índice
     public String actualizarEntidad(int indice, MascotaDTO dto) {
         try {
@@ -72,4 +84,42 @@ public class MascotaControlador {
             throw new IllegalArgumentException("La clave no puede estar vacía.");
         }
     }
+
+    public MascotaDTO buscarPorNombreYEspecie(String nombre, String especie) {
+        for (MascotaDTO m : obtenerEntidades()) {
+            if (m.getNombre().equals(nombre) && m.getEspecie().equals(especie)) {
+                return m;
+            }
+        }
+        return null;
+    }
+
+    public String actualizarPorClave(String claveOriginal, MascotaDTO nueva) {
+        List<Mascota> lista = dao.listar();
+        for (int i = 0; i < lista.size(); i++) {
+            if (lista.get(i).getClave().equals(claveOriginal)) {
+                Mascota mascotaActualizada = new Mascota(
+                        nueva.getNombre(),
+                        nueva.getEspecie(),
+                        nueva.getEdad(),
+                        nueva.getClave()
+                );
+                dao.actualizarPorIndice(i, mascotaActualizada);
+                return "✅ Mascota actualizada correctamente.";
+            }
+        }
+        return "❌ No se encontró la mascota para actualizar.";
+    }
+
+
+
+    // Método para guardar la lista completa de mascotas (para persistencia total)
+    public void guardarEntidades(List<MascotaDTO> lista) {
+        List<Mascota> entidades = new ArrayList<>();
+        for (MascotaDTO dto : lista) {
+            entidades.add(new Mascota(dto.getNombre(), dto.getEspecie(), dto.getEdad(), dto.getClave()));
+        }
+        dao.guardarLista(entidades);
+    }
+
 }
