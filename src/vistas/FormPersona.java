@@ -250,15 +250,23 @@ public class FormPersona extends JFrame {
     }
 
     private void eliminarSeleccionada() {
-        int index = listaPersonas.getSelectedIndex();
-        if (index != -1) {
-            String seleccion = listModel.getElementAt(index);
-            String id = seleccion.substring(seleccion.indexOf('(') + 1, seleccion.indexOf(')'));
-            controlador.eliminarPorIdentificacion(id);
-            actualizarLista();
-            limpiarCampos();
+        int filaSeleccionada = tablaPersonas.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            String id = (String) tableModel.getValueAt(filaSeleccionada, 2); // columna 2 = ID
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "¿Estás seguro de eliminar a la persona con ID: " + id + "?",
+                    "Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                controlador.eliminarPorIdentificacion(id);
+                actualizarLista();
+                limpiarCampos();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "⚠️ Selecciona una persona de la tabla para eliminar.");
         }
     }
+
 
     private void cargarPersonaSeleccionada() {
         int index = listaPersonas.getSelectedIndex();
