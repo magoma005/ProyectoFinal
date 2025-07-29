@@ -8,139 +8,172 @@ import modelo.Veterinario;
 import DAO.MascotaDAO;
 import modelo.Mascota;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
 public class FormPersona extends JFrame {
 
-    // Controlador principal que maneja las operaciones sobre personas
     private final PersonaControlador controlador = new PersonaControlador();
-
-    // Modelo de lista que se usa para llenar la JList de personas
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
 
-    // Componentes del formulario
     private JComboBox<String> tipoCombo;
     private JTextField nombreField, idField, campoExtraField;
     private JLabel campoExtraLabel;
-    private JList<String> listaPersonas;
+    private JList<String> listaPersonas; // Este componente se necesita para selección y eliminación por ID
     private JComboBox<String> comboMascotas;
+    private JTable tablaPersonas;
+    private DefaultTableModel tableModel;
 
-    // DAO para acceder a la información de mascotas
     private final MascotaDAO mascotaDAO = new MascotaDAO();
-
-    // Variable que guarda el ID original de una persona seleccionada para actualizarla correctamente
     private String idOriginalSeleccionado = null;
 
-    // Constructor principal del formulario
     public FormPersona() {
         setTitle("👥 Gestión de Personas");
-        setSize(520, 520);
-        setLocationRelativeTo(null); // Centra la ventana
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE); // Cierra solo esta ventana
+        setSize(700, 600);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
+        getContentPane().setBackground(Color.decode("#F0F2F5")); // fondo suave general
 
-        // Agrega los paneles al formulario
+        listaPersonas = new JList<>(listModel);
+        listaPersonas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listaPersonas.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        listaPersonas.setFixedCellHeight(28);
+        listaPersonas.setBorder(BorderFactory.createLineBorder(new Color(0xCCCCCC)));
+        listaPersonas.setSelectionBackground(new Color(0xD6EAF8));
+
+        listaPersonas.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) cargarPersonaSeleccionada();
+        });
+
         add(crearFormulario(), BorderLayout.NORTH);
         add(crearLista(), BorderLayout.CENTER);
         add(crearBotonera(), BorderLayout.SOUTH);
 
-        // Llena la lista con personas existentes
         actualizarLista();
-
-        // Agrega un listener para detectar cuando se selecciona una persona de la lista
-        listaPersonas.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                cargarPersonaSeleccionada();
-            }
-        });
     }
 
-    // Crea el panel del formulario de datos personales
     private JPanel crearFormulario() {
-        JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10)); // 6 filas, 2 columnas
-        panel.setBorder(BorderFactory.createTitledBorder(" Datos de Persona"));
+        JPanel panel = new JPanel(new GridLayout(6, 2, 12, 12));
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY),
+                "Datos de Persona ", 0, 0, new Font("Segoe UI", Font.BOLD, 16), Color.DARK_GRAY));
+        panel.setBackground(Color.WHITE);
+        panel.setPreferredSize(new Dimension(700, 200));
+
+        Font labelFont = new Font("Segoe UI", Font.PLAIN, 14);
 
         tipoCombo = new JComboBox<>(new String[]{"Propietario", "Veterinario"});
-        nombreField = new JTextField();
-        idField = new JTextField();
-        campoExtraField = new JTextField();
-        campoExtraLabel = new JLabel("Teléfono"); // Por defecto, para propietarios
+        tipoCombo.setFont(labelFont);
 
-        // Combo que muestra las mascotas disponibles
+        nombreField = new JTextField(); nombreField.setFont(labelFont);
+        idField = new JTextField(); idField.setFont(labelFont);
+        campoExtraField = new JTextField(); campoExtraField.setFont(labelFont);
+
+        campoExtraLabel = new JLabel("Teléfono", SwingConstants.RIGHT);
+        campoExtraLabel.setFont(labelFont);
+
         comboMascotas = new JComboBox<>();
-        llenarComboMascotas(); // Carga las mascotas en el combo
+        comboMascotas.setFont(labelFont);
+        llenarComboMascotas();
 
-        // Listener que cambia la etiqueta del campo extra según el tipo de persona
         tipoCombo.addActionListener(e -> actualizarEtiquetaCampoExtra());
 
-        // Agrega los componentes al panel
-        panel.add(new JLabel("Tipo:"));
+        panel.add(new JLabel("Tipo:", SwingConstants.RIGHT)).setFont(labelFont);
         panel.add(tipoCombo);
-        panel.add(new JLabel("Nombre:"));
+        panel.add(new JLabel("Nombre:", SwingConstants.RIGHT)).setFont(labelFont);
         panel.add(nombreField);
-        panel.add(new JLabel("Identificación:"));
+        panel.add(new JLabel("Identificación:", SwingConstants.RIGHT)).setFont(labelFont);
         panel.add(idField);
         panel.add(campoExtraLabel);
         panel.add(campoExtraField);
-        panel.add(new JLabel("A cargo de:"));
+        panel.add(new JLabel("A cargo de:", SwingConstants.RIGHT)).setFont(labelFont);
         panel.add(comboMascotas);
 
         return panel;
     }
 
-    // Crea el panel que contiene la lista de personas registradas
+
     private JScrollPane crearLista() {
-        listaPersonas = new JList<>(listModel);
-        listaPersonas.setBorder(BorderFactory.createTitledBorder("📃 Personas registradas"));
-        return new JScrollPane(listaPersonas);
+        String[] columnas = {"Tipo", "Nombre", "ID", "Extra", "Mascota a Cargo"};
+        tableModel = new DefaultTableModel(columnas, 0) {
+            @Override public boolean isCellEditable(int row, int column) { return false; }
+        };
+
+        tablaPersonas = new JTable(tableModel);
+        tablaPersonas.setRowHeight(28);
+        tablaPersonas.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        tablaPersonas.setSelectionBackground(new Color(0xD1F2EB));
+        tablaPersonas.setSelectionForeground(Color.BLACK);
+        tablaPersonas.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
+        tablaPersonas.getTableHeader().setBackground(new Color(0xAED6F1));
+        tablaPersonas.setGridColor(new Color(220, 220, 220));
+
+        tablaPersonas.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) cargarPersonaSeleccionadaDesdeTabla();
+        });
+
+        JScrollPane scroll = new JScrollPane(tablaPersonas);
+        scroll.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY),
+                "Personas Registradas", 0, 0, new Font("Segoe UI", Font.BOLD, 15), Color.DARK_GRAY));
+        scroll.getViewport().setBackground(Color.WHITE);
+        return scroll;
     }
 
-    // Crea el panel con los botones de acción: Guardar, Actualizar, Eliminar
+
     private JPanel crearBotonera() {
-        JButton btnGuardar = new JButton("Guardar");
+        JButton btnGuardar = crearBoton("Guardar", new Color(47, 57, 15));
         btnGuardar.addActionListener(e -> guardarPersona());
 
-        JButton btnActualizar = new JButton("Actualizar");
+        JButton btnActualizar = crearBoton("Actualizar", new Color(221, 75, 212));
         btnActualizar.addActionListener(e -> actualizarPersona());
 
-        JButton btnEliminar = new JButton("Eliminar");
+        JButton btnEliminar = crearBoton("Eliminar", new Color(204, 0, 0));
         btnEliminar.addActionListener(e -> eliminarSeleccionada());
 
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 15));
+        panel.setBackground(Color.decode("#F0F2F5"));
         panel.add(btnGuardar);
         panel.add(btnActualizar);
         panel.add(btnEliminar);
+
         return panel;
     }
 
-    // Cambia la etiqueta del campo extra dependiendo si es Propietario o Veterinario
+    private JButton crearBoton(String texto, Color colorFondo) {
+        JButton btn = new JButton(texto);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btn.setForeground(Color.WHITE);
+        btn.setBackground(colorFondo);
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btn.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+        return btn;
+    }
+
+
     private void actualizarEtiquetaCampoExtra() {
         String tipo = (String) tipoCombo.getSelectedItem();
         campoExtraLabel.setText(tipo.equals("Propietario") ? "Teléfono" : "Especialidad");
     }
 
-    // Lógica para guardar una nueva persona
     private void guardarPersona() {
         String tipo = (String) tipoCombo.getSelectedItem();
         String nombre = nombreField.getText().trim();
         String id = idField.getText().trim();
         String extra = campoExtraField.getText().trim();
 
-        // Validación de campos vacíos
         if (nombre.isEmpty() || id.isEmpty() || extra.isEmpty()) {
             JOptionPane.showMessageDialog(this, "❌ Todos los campos son obligatorios");
             return;
         }
 
-        // Verifica si ya existe una persona con el mismo ID
         if (controlador.buscarPorIdentificacion(id) != null) {
             JOptionPane.showMessageDialog(this, "⚠️ Ya existe una persona con esta identificación.");
             return;
         }
 
         try {
-            // Crea un objeto Persona según el tipo
             Persona persona;
             if (tipo.equals("Propietario")) {
                 persona = new Propietario(nombre, id, extra);
@@ -148,14 +181,12 @@ public class FormPersona extends JFrame {
                 persona = new Veterinario(nombre, id, extra);
             }
 
-            // Asigna la mascota seleccionada si hay alguna
             String nombreMascota = (String) comboMascotas.getSelectedItem();
             if (nombreMascota != null) {
                 Mascota mascota = mascotaDAO.buscarPorNombre(nombreMascota);
                 persona.setMascotaACargo(mascota);
             }
 
-            // Agrega la persona al sistema
             controlador.agregar(persona);
             limpiarCampos();
             actualizarLista();
@@ -167,33 +198,28 @@ public class FormPersona extends JFrame {
         }
     }
 
-    // Lógica para actualizar una persona ya existente
     private void actualizarPersona() {
         String tipo = (String) tipoCombo.getSelectedItem();
         String nombre = nombreField.getText().trim();
         String nuevoId = idField.getText().trim();
         String extra = campoExtraField.getText().trim();
 
-        // Validación de campos vacíos
         if (nombre.isEmpty() || nuevoId.isEmpty() || extra.isEmpty()) {
             JOptionPane.showMessageDialog(this, "❌ Todos los campos son obligatorios");
             return;
         }
 
-        // Verifica si se seleccionó una persona antes
         if (idOriginalSeleccionado == null) {
             JOptionPane.showMessageDialog(this, "⚠️ Debes seleccionar una persona de la lista para actualizarla.");
             return;
         }
 
-        // Verifica si el nuevo ID ya está siendo usado por otra persona
         if (!nuevoId.equals(idOriginalSeleccionado) && controlador.buscarPorIdentificacion(nuevoId) != null) {
             JOptionPane.showMessageDialog(this, "⚠️ El nuevo ID ya está en uso por otra persona.");
             return;
         }
 
         try {
-            // Crea la nueva persona actualizada
             Persona persona;
             if (tipo.equals("Propietario")) {
                 persona = new Propietario(nombre, nuevoId, extra);
@@ -201,14 +227,12 @@ public class FormPersona extends JFrame {
                 persona = new Veterinario(nombre, nuevoId, extra);
             }
 
-            // Asigna mascota si hay seleccionada
             String nombreMascota = (String) comboMascotas.getSelectedItem();
             if (nombreMascota != null) {
                 Mascota mascota = mascotaDAO.buscarPorNombre(nombreMascota);
                 persona.setMascotaACargo(mascota);
             }
 
-            // Actualiza la persona en el sistema
             boolean actualizado = controlador.actualizarPersona(idOriginalSeleccionado, persona);
             if (actualizado) {
                 JOptionPane.showMessageDialog(this, "✅ Persona actualizada");
@@ -225,7 +249,6 @@ public class FormPersona extends JFrame {
         }
     }
 
-    // Elimina la persona seleccionada en la lista
     private void eliminarSeleccionada() {
         int index = listaPersonas.getSelectedIndex();
         if (index != -1) {
@@ -237,7 +260,6 @@ public class FormPersona extends JFrame {
         }
     }
 
-    // Carga los datos de la persona seleccionada en el formulario
     private void cargarPersonaSeleccionada() {
         int index = listaPersonas.getSelectedIndex();
         if (index != -1) {
@@ -245,42 +267,57 @@ public class FormPersona extends JFrame {
             String id = seleccion.substring(seleccion.indexOf('(') + 1, seleccion.indexOf(')'));
             Persona p = controlador.buscarPorIdentificacion(id);
             if (p != null) {
-                nombreField.setText(p.getNombre());
-                idField.setText(p.getIdentificacion());
-                idField.setEditable(true);
-                idOriginalSeleccionado = p.getIdentificacion();
-
-                if (p instanceof Propietario) {
-                    tipoCombo.setSelectedItem("Propietario");
-                    campoExtraField.setText(((Propietario) p).getTelefono());
-                } else if (p instanceof Veterinario) {
-                    tipoCombo.setSelectedItem("Veterinario");
-                    campoExtraField.setText(((Veterinario) p).getEspecialidad());
-                }
-
-                // Muestra la mascota a cargo en el combo
-                Mascota mascota = p.getMascotaACargo();
-                if (mascota != null) {
-                    comboMascotas.setSelectedItem(mascota.getNombre());
-                } else {
-                    comboMascotas.setSelectedIndex(-1);
-                }
-
-                actualizarEtiquetaCampoExtra();
+                cargarDatosPersona(p);
             }
         }
     }
 
-    // Actualiza la lista visual de personas
-    private void actualizarLista() {
-        listModel.clear();
-        List<Persona> personas = controlador.listar();
-        for (Persona p : personas) {
-            listModel.addElement(p.toString()); // Usa el toString de la persona
+    private void cargarPersonaSeleccionadaDesdeTabla() {
+        int fila = tablaPersonas.getSelectedRow();
+        if (fila != -1) {
+            String id = (String) tableModel.getValueAt(fila, 2);
+            Persona p = controlador.buscarPorIdentificacion(id);
+            if (p != null) {
+                cargarDatosPersona(p);
+            }
         }
     }
 
-    // Limpia todos los campos del formulario
+    private void cargarDatosPersona(Persona p) {
+        nombreField.setText(p.getNombre());
+        idField.setText(p.getIdentificacion());
+        idField.setEditable(true);
+        idOriginalSeleccionado = p.getIdentificacion();
+
+        if (p instanceof Propietario) {
+            tipoCombo.setSelectedItem("Propietario");
+            campoExtraField.setText(((Propietario) p).getTelefono());
+        } else if (p instanceof Veterinario) {
+            tipoCombo.setSelectedItem("Veterinario");
+            campoExtraField.setText(((Veterinario) p).getEspecialidad());
+        }
+
+        Mascota mascota = p.getMascotaACargo();
+        if (mascota != null) {
+            comboMascotas.setSelectedItem(mascota.getNombre());
+        } else {
+            comboMascotas.setSelectedIndex(-1);
+        }
+
+        actualizarEtiquetaCampoExtra();
+    }
+
+    private void actualizarLista() {
+        tableModel.setRowCount(0);
+        List<Persona> personas = controlador.listar();
+        for (Persona p : personas) {
+            String tipo = (p instanceof Propietario) ? "Propietario" : "Veterinario";
+            String extra = (p instanceof Propietario) ? ((Propietario) p).getTelefono() : ((Veterinario) p).getEspecialidad();
+            String mascota = (p.getMascotaACargo() != null) ? p.getMascotaACargo().getNombre() : "Ninguna";
+            tableModel.addRow(new Object[]{tipo, p.getNombre(), p.getIdentificacion(), extra, mascota});
+        }
+    }
+
     private void limpiarCampos() {
         nombreField.setText("");
         idField.setText("");
@@ -289,7 +326,6 @@ public class FormPersona extends JFrame {
         idOriginalSeleccionado = null;
     }
 
-    // Llena el combo con los nombres de mascotas existentes
     private void llenarComboMascotas() {
         comboMascotas.removeAllItems();
         List<Mascota> mascotas = mascotaDAO.listar();
@@ -298,7 +334,6 @@ public class FormPersona extends JFrame {
         }
     }
 
-    // Método principal para ejecutar la ventana
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new FormPersona().setVisible(true));
     }

@@ -20,7 +20,8 @@ public class VentanaPrincipal extends JFrame {
 
     public VentanaPrincipal() {
         setTitle("PetControl - Sistema de Gestión Clínica Veterinaria");
-        setSize(1000, 650);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setUndecorated(false); // O true si quieres ocultar barra de título
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -148,13 +149,24 @@ public class VentanaPrincipal extends JFrame {
 
         setVisible(true); // Mostrar ventana primero
 
-        // ✅ Centrar el panel de bienvenida después de mostrar la ventana
-        SwingUtilities.invokeLater(() -> {
-            int ancho = 460;
-            int alto = 400;
-            int x = (escritorio.getWidth() - ancho) / 2;
-            int y = (escritorio.getHeight() - alto) / 2;
-            panelBienvenida.setBounds(x, y, ancho, alto);
+        // Forzar ubicación del panel bienvenida
+        int ancho = 460;
+        int alto = 400;
+        int x = (escritorio.getWidth() - ancho) / 2;
+        int y = (escritorio.getHeight() - alto) / 2;
+        panelBienvenida.setBounds(x, y, ancho, alto);
+        panelBienvenida.revalidate();
+        panelBienvenida.repaint();
+
+        // Reubicar si se cambia el tamaño de la ventana
+        escritorio.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                int ancho = 460;
+                int alto = 400;
+                int x = (escritorio.getWidth() - ancho) / 2;
+                int y = (escritorio.getHeight() - alto) / 2;
+                panelBienvenida.setBounds(x, y, ancho, alto);
+            }
         });
     }
 

@@ -36,4 +36,4 @@ public class Historial {
     public ArrayList<EventoClinico> getEventos() {
         return eventos;
     }
-} */
+}*/
