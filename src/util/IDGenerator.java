@@ -1,4 +1,4 @@
-package util; //Se creó la clase IDGenerator para generar códigos automáticos únicos.
+package util;
 
 public class IDGenerator {
     private static int contadorConsulta = 0;
