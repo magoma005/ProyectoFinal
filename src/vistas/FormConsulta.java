@@ -1,5 +1,6 @@
 package vistas;
 
+import DTO.MascotaDTO;
 import controlador.ConsultaControlador;
 import DTO.ConsultaDTO;
 
@@ -9,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 import DAO.MascotaDAO;
+import excepciones.DatoInvalidoException;
 import modelo.Mascota;
 
 
@@ -97,8 +99,28 @@ public class FormConsulta extends JFrame {
         btnAgendar.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnAgendar.setBackground(new Color(100, 180, 240));
         btnAgendar.setForeground(Color.WHITE);
-        btnAgendar.addActionListener(e -> agendarConsulta()); // Acción al presionar
+        btnAgendar.addActionListener(e -> agendarConsulta());
         panelFormulario.add(btnAgendar, gbc);
+
+        // === Botón: Eliminar Consulta ===
+        gbc.gridy++;
+        JButton btnEliminar = new JButton("Eliminar Consulta");
+        btnEliminar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnEliminar.setBackground(new Color(255, 100, 100));
+        btnEliminar.setForeground(Color.WHITE);
+        btnEliminar.addActionListener(e -> eliminarConsulta());
+        panelFormulario.add(btnEliminar, gbc);
+
+        // === Botón: Editar Consulta ===
+        gbc.gridy++;
+        JButton btnActualizar = new JButton("Actualizar Consulta");
+        btnActualizar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnActualizar.setBackground(new Color(4, 76, 21));
+        btnActualizar.setForeground(Color.WHITE);
+        btnActualizar.addActionListener(e -> actualizarConsulta());
+        panelFormulario.add(btnActualizar, gbc);
+
+
 
         // Agrega el formulario al panel principal
         panelPrincipal.add(panelFormulario);
@@ -129,6 +151,8 @@ public class FormConsulta extends JFrame {
         // Carga las consultas existentes al iniciar
         cargarConsultas();
     }
+
+
 
     // Método que agenda una nueva consulta usando los datos del formulario
     private void agendarConsulta() {
@@ -161,12 +185,11 @@ public class FormConsulta extends JFrame {
     private void cargarConsultas() {
         modeloTabla.setRowCount(0); // Limpia la tabla
         List<ConsultaDTO> consultas = controlador.obtenerConsultas();
-
         for (ConsultaDTO c : consultas) {
             modeloTabla.addRow(new Object[]{
                     c.getFecha(),
                     c.getMascota(),
-                    c.getServicio(),      // <--- Agregado
+                    c.getServicio(),
                     c.getDiagnostico()
             });
         }
@@ -179,6 +202,74 @@ public class FormConsulta extends JFrame {
         comboServicio.setSelectedIndex(0);
         comboMascotas.setSelectedIndex(0);
     }
+
+    // Elimina la consulta seleccionada de la tabla
+    private void eliminarConsulta() {
+        int filaSeleccionada = tablaConsultas.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor selecciona una consulta para eliminar.",
+                    "Sin selección", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Estás seguro de eliminar esta consulta?", "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            String resultado = controlador.eliminarConsulta(filaSeleccionada);
+            JOptionPane.showMessageDialog(this, resultado);
+            cargarConsultas(); // Recargar la tabla
+        }
+    }
+
+    private void actualizarConsulta() {
+        int filaSeleccionada = tablaConsultas.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona una consulta en la tabla para actualizar.",
+                    "Sin selección", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            // Captura los nuevos datos desde el formulario
+            String fecha = txtFecha.getText().trim();
+            String mascota = (String) comboMascotas.getSelectedItem();
+            String servicio = (String) comboServicio.getSelectedItem();
+            String diagnostico = txtDiagnostico.getText().trim();
+
+            // Validación
+            if (fecha.isEmpty() || mascota == null || servicio == null || diagnostico.isEmpty()) {
+                mostrarError("Todos los campos deben estar completos para actualizar.");
+                return;
+            }
+
+            // Crea un nuevo objeto con los datos actualizados
+            ConsultaDTO dtoActualizada = new ConsultaDTO(fecha, mascota, servicio, diagnostico);
+
+            // Llama al controlador para actualizar la consulta
+            String mensaje = controlador.actualizarConsulta(filaSeleccionada, dtoActualizada);
+
+            mensaje(mensaje);
+            limpiarFormulario();
+            cargarConsultas();
+
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
+        }
+    }
+
+    private void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void mensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
+    }
+
+
 
     // Obtiene los nombres de las mascotas registradas para mostrarlas en el JComboBox
     private String[] obtenerNombresMascotas() {

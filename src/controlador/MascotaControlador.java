@@ -128,7 +128,7 @@ public class MascotaControlador {
         return "❌ No se encontró la mascota para actualizar.";
     }
 
-    // =================================================
+   /* // =================================================
     // Método que guarda una lista completa de mascotas. Se usa cuando se quiere sobrescribir todo el archivo
     // =================================================
     public void guardarEntidades(List<MascotaDTO> lista) {
@@ -137,7 +137,6 @@ public class MascotaControlador {
             entidades.add(new Mascota(dto.getNombre(), dto.getEspecie(), dto.getEdad(), dto.getClave()));
         }
         dao.guardarLista(entidades);
-    }
-
+    }*/
 }
 

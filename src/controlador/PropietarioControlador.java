@@ -6,10 +6,8 @@ import java.util.List;
 
 // Controlador encargado de manejar la lógica relacionada con los propietarios
 public class PropietarioControlador {
-
     // Instancia del DAO responsable de la persistencia de propietarios
     private final PropietarioDAO dao = new PropietarioDAO();
-
     // Método para agregar un nuevo propietario al sistema
     public String agregarPropietario(PropietarioDTO dto) {
         // Verifica que los datos del propietario sean válidos

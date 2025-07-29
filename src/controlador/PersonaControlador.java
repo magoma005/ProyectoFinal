@@ -37,11 +37,11 @@ public class PersonaControlador {
         dao.guardarPersonas(personas); // Se guarda la lista modificada
     }
 
-    // Validación estática reutilizable para nombre y documento (solo números)
+   /* // Validación estática reutilizable para nombre y documento (solo números)
     public static boolean validarPersona(String nombre, String documento) {
         return nombre != null && !nombre.isEmpty() &&
                 documento != null && documento.matches("\\d+");
-    }
+    }*/
 
     // Actualiza los datos de una persona existente identificada por su ID
     public boolean actualizarPersona(String id, Persona nuevaPersona) {

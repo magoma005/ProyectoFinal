@@ -1,4 +1,4 @@
-package controlador;
+/*package controlador;
 
 import DAO.CitaDAO;
 import DTO.CitaDTO;
@@ -59,4 +59,4 @@ public class CitaControlador {
         if (dto.getHora() == null || dto.getHora().isBlank())
             throw new IllegalArgumentException("La hora es obligatoria.");
     }
-}
+}*/

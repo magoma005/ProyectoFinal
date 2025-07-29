@@ -4,10 +4,8 @@ import modelo.Consulta;
 import modelo.Mascota;
 import modelo.Persona;
 import DAO.PersonaDAO;
-
 import java.util.List;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.util.ArrayList;
@@ -21,21 +19,18 @@ public class VentanaPrincipal extends JFrame {
     private List<Persona> listaPersonas;
 
     public VentanaPrincipal() {
-        // CONFIGURACIÓN DE LA VENTANA
         setTitle("PetControl - Sistema de Gestión Clínica Veterinaria");
-        setSize(900, 600);
+        setSize(1000, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Cargar personas
         listaPersonas = personaDAO.cargarPersonas();
 
-        // Fondo
-        Color colorFondo = new Color(240, 248, 255);
+        Color colorFondo = new Color(245, 251, 255);
         getContentPane().setBackground(colorFondo);
 
-        // Árbol de servicios (panel izquierdo)
+        // === Árbol lateral izquierdo ===
         DefaultMutableTreeNode raiz = new DefaultMutableTreeNode("Servicios");
         raiz.add(new DefaultMutableTreeNode("Medicina general"));
         raiz.add(new DefaultMutableTreeNode("Cirugía"));
@@ -43,30 +38,51 @@ public class VentanaPrincipal extends JFrame {
         raiz.add(new DefaultMutableTreeNode("Peluquería"));
         raiz.add(new DefaultMutableTreeNode("Urgencias"));
         JTree arbolServicios = new JTree(raiz);
+        arbolServicios.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         JScrollPane scrollArbol = new JScrollPane(arbolServicios);
+        scrollArbol.setPreferredSize(new Dimension(180, 0));
+        scrollArbol.setBorder(BorderFactory.createTitledBorder("Áreas disponibles"));
         add(scrollArbol, BorderLayout.WEST);
 
-        // Escritorio (panel central)
+        // === Panel de contenido central ===
+        JPanel panelContenido = new JPanel(new BorderLayout());
+        panelContenido.setBackground(new Color(255, 248, 240));
+        panelContenido.setOpaque(true);
+        add(panelContenido, BorderLayout.CENTER);
+
         escritorio = new JDesktopPane();
-        escritorio.setBackground(Color.WHITE);
-        add(escritorio, BorderLayout.CENTER);
+        escritorio.setOpaque(false);
+        panelContenido.add(escritorio, BorderLayout.CENTER);
 
-        // Panel de bienvenida
-        JPanel panelBienvenida = new JPanel();
-        panelBienvenida.setBackground(Color.WHITE);
+        // === Panel de bienvenida personalizado ===
+        JPanel panelBienvenida = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(new Color(255, 249, 243));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        panelBienvenida.setOpaque(true);
+        panelBienvenida.setBackground(new Color(255, 248, 240));
         panelBienvenida.setLayout(new BoxLayout(panelBienvenida, BoxLayout.Y_AXIS));
+        panelBienvenida.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        escritorio.add(panelBienvenida);
 
-        // Logo
+        // === Contenido visual del panel ===
         ImageIcon iconoLogo = new ImageIcon(getClass().getResource("/imagenes/logo2.jpg"));
-        Image imagenLogo = iconoLogo.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        Image imagenLogo = iconoLogo.getImage().getScaledInstance(160, 160, Image.SCALE_SMOOTH);
         JLabel lblLogo = new JLabel(new ImageIcon(imagenLogo));
         lblLogo.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelBienvenida.add(Box.createVerticalStrut(20));
         panelBienvenida.add(lblLogo);
 
-        // Bienvenida
         JLabel lblBienvenida = new JLabel("Bienvenido a PetControl");
-        lblBienvenida.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        lblBienvenida.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        lblBienvenida.setForeground(new Color(33, 97, 140));
         lblBienvenida.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelBienvenida.add(Box.createVerticalStrut(20));
         panelBienvenida.add(lblBienvenida);
@@ -76,53 +92,32 @@ public class VentanaPrincipal extends JFrame {
         lblMensaje.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelBienvenida.add(Box.createVerticalStrut(10));
         panelBienvenida.add(lblMensaje);
-
-        /*JButton btnAccesoPacientes = new JButton("Ver pacientes");
-        btnAccesoPacientes.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnAccesoPacientes.addActionListener(e -> new FormMascota().setVisible(true));
-        panelBienvenida.add(Box.createVerticalStrut(20));
-        panelBienvenida.add(btnAccesoPacientes);*/
-
-        //Botón "Agendar consulta" comentado
-        /*
-        JButton btnAccesoConsulta = new JButton("Agendar consulta");
-        btnAccesoConsulta.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnAccesoConsulta.addActionListener(e -> agendarConsulta());
-        panelBienvenida.add(Box.createVerticalStrut(10));
-        panelBienvenida.add(btnAccesoConsulta);
-        */
-
         panelBienvenida.add(Box.createVerticalGlue());
-        panelBienvenida.setBounds(200, 50, 400, 400);
-        escritorio.add(panelBienvenida);
-        panelBienvenida.revalidate();
-        panelBienvenida.repaint();
 
-        // Pie de página
+        // === Pie de página ===
         JLabel piePagina = new JLabel("© 2025 PetControl. Todos los derechos reservados.", SwingConstants.CENTER);
         piePagina.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+        piePagina.setForeground(new Color(100, 100, 100));
+        piePagina.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         add(piePagina, BorderLayout.SOUTH);
 
-        // BARRA DE MENÚ con botones centrados
+        // === Barra de menú ===
         JMenuBar barraMenu = new JMenuBar();
-
-// Espacio a la izquierda para centrar los elementos
+        barraMenu.setBackground(Color.WHITE);
+        barraMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
         barraMenu.add(Box.createHorizontalGlue());
 
-// Menú Archivo
         JMenu menuArchivo = new JMenu("Archivo");
         menuArchivo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         JMenuItem itemSalir = new JMenuItem("Salir");
         itemSalir.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         itemSalir.addActionListener(e -> {
-            // Guarda los datos antes de salir
             personaDAO.guardarPersonas(listaPersonas);
             JOptionPane.showMessageDialog(this, "👋 Gracias por usar PetControl. ¡Hasta pronto!");
             System.exit(0);
         });
         menuArchivo.add(itemSalir);
 
-// Menú Pacientes
         JMenu menuPacientes = new JMenu("Pacientes");
         menuPacientes.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         JMenuItem itemPacientes = new JMenuItem("Ver Pacientes");
@@ -130,7 +125,6 @@ public class VentanaPrincipal extends JFrame {
         itemPacientes.addActionListener(e -> new FormMascota().setVisible(true));
         menuPacientes.add(itemPacientes);
 
-// Menú Consultas
         JMenu menuConsultas = new JMenu("Consultas");
         menuConsultas.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         JMenuItem itemConsultas = new JMenuItem("Ver Consultas");
@@ -138,39 +132,36 @@ public class VentanaPrincipal extends JFrame {
         itemConsultas.addActionListener(e -> new FormConsulta().setVisible(true));
         menuConsultas.add(itemConsultas);
 
-// MENÚ Registro
         JMenu menuRegistro = new JMenu("Registro");
         menuRegistro.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         JMenuItem itemPersonas = new JMenuItem("Gestionar personas");
         itemPersonas.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        itemPersonas.addActionListener(e -> {
-            // Abre la ventana de gestión de personas
-            FormPersona ventanaPersonas = new FormPersona();
-            ventanaPersonas.setVisible(true);
-        });
+        itemPersonas.addActionListener(e -> new FormPersona().setVisible(true));
         menuRegistro.add(itemPersonas);
 
-        // Añadir los menús a la barra
         barraMenu.add(menuArchivo);
         barraMenu.add(menuPacientes);
         barraMenu.add(menuConsultas);
         barraMenu.add(menuRegistro);
-
-        // Espacio a la derecha para mantener los botones centrados
         barraMenu.add(Box.createHorizontalGlue());
-
-       // Asignar barra al JFrame
         setJMenuBar(barraMenu);
-        setVisible(true);
+
+        setVisible(true); // Mostrar ventana primero
+
+        // ✅ Centrar el panel de bienvenida después de mostrar la ventana
+        SwingUtilities.invokeLater(() -> {
+            int ancho = 460;
+            int alto = 400;
+            int x = (escritorio.getWidth() - ancho) / 2;
+            int y = (escritorio.getHeight() - alto) / 2;
+            panelBienvenida.setBounds(x, y, ancho, alto);
+        });
     }
 
-    // Creacion de un Splash Screen con su logo y carga
     public static void mostrarSplashScreen() {
         JWindow splash = new JWindow();
-        // Panel con BorderLayout para texto arriba y logo abajo
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
-        // Texto de carga
         JLabel lblTexto = new JLabel("Cargando PetControl...", SwingConstants.CENTER);
         lblTexto.setFont(new Font("Segoe UI", Font.BOLD, 18));
         panel.add(lblTexto, BorderLayout.NORTH);
@@ -182,16 +173,15 @@ public class VentanaPrincipal extends JFrame {
         splash.setLocationRelativeTo(null);
         splash.setVisible(true);
         try {
-            Thread.sleep(2500); // duración del splash
+            Thread.sleep(2500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         splash.setVisible(false);
         splash.dispose();
     }
 
-    // FORMULARIO DE REGISTRO
+// FORMULARIO DE REGISTRO
     private void crearFormularioIngreso() {
         JInternalFrame form = new JInternalFrame("Formulario de paciente", true, true, true, true);
         form.setSize(500, 300);
