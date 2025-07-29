@@ -1,6 +1,5 @@
 package vistas;
 
-import modelo.Consulta;
 import modelo.Mascota;
 import modelo.Persona;
 import DAO.PersonaDAO;
@@ -14,23 +13,20 @@ public class VentanaPrincipal extends JFrame {
 
     private JDesktopPane escritorio;
     private ArrayList<Mascota> listaPacientes = new ArrayList<>();
-    private ArrayList<Consulta> listaConsultas = new ArrayList<>();
     private final PersonaDAO personaDAO = new PersonaDAO();
     private List<Persona> listaPersonas;
 
     public VentanaPrincipal() {
         setTitle("PetControl - Sistema de Gestión Clínica Veterinaria");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setUndecorated(false); // O true si quieres ocultar barra de título
+        setUndecorated(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-
         listaPersonas = personaDAO.cargarPersonas();
 
         Color colorFondo = new Color(245, 251, 255);
         getContentPane().setBackground(colorFondo);
-
         // === Árbol lateral izquierdo ===
         DefaultMutableTreeNode raiz = new DefaultMutableTreeNode("Servicios");
         raiz.add(new DefaultMutableTreeNode("Medicina general"));
@@ -50,7 +46,6 @@ public class VentanaPrincipal extends JFrame {
         panelContenido.setBackground(new Color(255, 248, 240));
         panelContenido.setOpaque(true);
         add(panelContenido, BorderLayout.CENTER);
-
         escritorio = new JDesktopPane();
         escritorio.setOpaque(false);
         panelContenido.add(escritorio, BorderLayout.CENTER);
